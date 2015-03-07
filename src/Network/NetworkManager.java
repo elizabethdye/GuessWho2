@@ -8,7 +8,8 @@ import java.util.concurrent.ArrayBlockingQueue;
 public class NetworkManager {
     private static NetworkManager ourInstance = new NetworkManager();
     public ArrayBlockingQueue<NetworkCommunication> recieved;
-    Thread serverThread, clientThread;
+    Thread serverThread;
+    ClientThread clientThread;
 
     public static NetworkManager getInstance() {
         return ourInstance;
@@ -29,11 +30,16 @@ public class NetworkManager {
 
     }
 
-    void openConnection() {
+    void openConnection(String ip, int port) {
         if (!channelSetup()){
             return;
         }
-        //todo: implement
+        clientThread = new ClientThread(ip, port);
+        clientThread.start();
+    }
+
+    void sendMessage(NetworkCommunication comm){
+        clientThread.toSend.add(comm);
     }
 
     ArrayList<String> getAvailableServers(){
@@ -41,11 +47,16 @@ public class NetworkManager {
         return new ArrayList<String>();
     }
 
-    void stopServer(){
-        //todo: implement
+    void endConnections() {
+        serverThread.interrupt();
+        clientThread.stopThread(); //custom clean stopper
     }
 
     boolean channelSetup(){
         return recieved != null;
+    }
+
+    NetworkCommunication getLatest() throws InterruptedException {
+        return recieved.take();
     }
 }

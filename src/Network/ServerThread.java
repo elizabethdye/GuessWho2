@@ -25,18 +25,22 @@ public class ServerThread extends Thread{
                 if (isStartCommand(socketReader.readLine())){
                     StringBuilder sb = new StringBuilder();
                     String line = socketReader.readLine();
-                    String header = line;
                     while(!isEndCommand(line)){
                         sb.append(line);
                     }
-                    //todo: parse out the data better than this... 
 
-                    NetworkCommunication comm = new NetworkCommunication(Message.TEXT, sb.toString());
+                    NetworkCommunication comm = getFromString(sb.toString());
+
                     manager.recieved.add(comm);
                 }
             } catch (IOException e) {
                 e.printStackTrace();
                 //todo: Get back to the user with the error
+            }
+            finally {
+                //close everything
+                //acceptor.close();
+                //connection.close();
             }
         }
     }
@@ -54,4 +58,14 @@ public class ServerThread extends Thread{
         return s.equals(END);
     }
 
+    NetworkCommunication getFromString(String s){
+        String[] lines = s.split("\n");
+        Message type = Message.fromString(lines[0]);
+        String data = "";
+        for (int i = 1; i < lines.length; ++i){
+            data += lines[i] + "\n";
+        }
+
+        return new NetworkCommunication(type, data);
+    }
 }

@@ -16,7 +16,7 @@ public class ClientThread extends Thread {
     public ArrayBlockingQueue toSend;
     boolean finished;
 
-    public ClientThread(Message type, String data, String destinationIP, int port){
+    public ClientThread(String destinationIP, int port){
         this.destinationIP = destinationIP;
         this.port = port;
         this.toSend = new ArrayBlockingQueue<NetworkCommunication>(2, true);
