@@ -6,10 +6,7 @@ import java.io.InputStreamReader;
 import java.net.ServerSocket;
 import java.net.Socket;
 
-/**
- * Created by John McAvey on 3/3/2015.
- */
-public class ServerThread {
+public class ServerThread extends Thread{
     ServerSocket acceptor;
     Socket connection;
     NetworkManager manager = NetworkManager.getInstance();
@@ -20,19 +17,26 @@ public class ServerThread {
         acceptor = new ServerSocket(port);
     }
 
-    public void listen() throws IOException {
+    public void run() {
         while(true){
-            acceptConnection();
-            BufferedReader socketReader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-            if (isStartCommand(socketReader.readLine())){
-                StringBuilder sb = new StringBuilder();
-                String line = socketReader.readLine();
-                String header = line;
-                while(!isEndCommand(line)){
-                    sb.append(line);
+            try {
+                acceptConnection();
+                BufferedReader socketReader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+                if (isStartCommand(socketReader.readLine())){
+                    StringBuilder sb = new StringBuilder();
+                    String line = socketReader.readLine();
+                    String header = line;
+                    while(!isEndCommand(line)){
+                        sb.append(line);
+                    }
+                    //todo: parse out the data better than this... 
+
+                    NetworkCommunication comm = new NetworkCommunication(Message.TEXT, sb.toString());
+                    manager.recieved.add(comm);
                 }
-                NetworkCommunication comm = new NetworkCommunication(null, header, sb.toString());
-                manager.recieved.add(comm);
+            } catch (IOException e) {
+                e.printStackTrace();
+                //todo: Get back to the user with the error
             }
         }
     }

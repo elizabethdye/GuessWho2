@@ -1,14 +1,14 @@
 package Network;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.concurrent.ArrayBlockingQueue;
 
-/**
- * Created by John McAvey on 3/3/2015.
- */
+
 public class NetworkManager {
     private static NetworkManager ourInstance = new NetworkManager();
     public ArrayBlockingQueue<NetworkCommunication> recieved;
+    Thread serverThread, clientThread;
 
     public static NetworkManager getInstance() {
         return ourInstance;
@@ -18,7 +18,15 @@ public class NetworkManager {
     }
 
     void startServer() {
-        //todo: implement
+        ServerThread thread = null;
+        try {
+            thread = new ServerThread(8888);
+            serverThread = new Thread(thread);
+            serverThread.start();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
     }
 
     void openConnection() {
