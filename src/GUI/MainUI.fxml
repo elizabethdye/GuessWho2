@@ -8,40 +8,40 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.layout.GridPane?>
 
-<SplitPane dividerPositions="0.4498186215235792" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="605.0" prefWidth="829.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8">
+<SplitPane dividerPositions="0.4498186215235792" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="605.0" prefWidth="829.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="GUI.Controller">
   <items>
       <SplitPane dividerPositions="0.7446102819237148" orientation="VERTICAL" prefHeight="200.0" prefWidth="160.0">
         <items>
           <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="213.0" prefWidth="295.0">
                <children>
-                  <TextArea editable="false" layoutY="-2.0" prefHeight="445.0" prefWidth="409.0" />
+                  <TextArea fx:id="conversation" editable="false" layoutY="-2.0" prefHeight="445.0" prefWidth="409.0" />
                </children>
             </AnchorPane>
             <SplitPane dividerPositions="0.29347826086956524" prefHeight="160.0" prefWidth="200.0">
               <items>
                   <VBox prefHeight="150.0" prefWidth="117.0">
                      <children>
-                        <ImageView fitHeight="150.0" fitWidth="100.0" pickOnBounds="true" preserveRatio="true" />
+                        <ImageView fx:id="profile" fitHeight="150.0" fitWidth="100.0" pickOnBounds="true" preserveRatio="true" />
                         <Label text="Your Image" translateX="20.0" />
                      </children>
                   </VBox>
                   <VBox prefHeight="200.0" prefWidth="100.0">
                      <children>
-                        <Label text="Your Turn">
+                        <Label fx:id="whoseTurn" text="Your Turn">
                            <font>
                               <Font size="24.0" />
                            </font>
                         </Label>
                         <HBox prefHeight="100.0" prefWidth="200.0">
                            <children>
-                              <TextArea prefHeight="60.0" prefWidth="265.0" />
+                              <TextArea fx:id="inputText" prefHeight="60.0" prefWidth="265.0" />
                            </children>
                         </HBox>
                         <HBox prefHeight="10.0" prefWidth="256.0" translateY="13.0">
                            <children>
-                              <Button mnemonicParsing="false" text="Yes" translateX="175.0" />
-                              <Button mnemonicParsing="false" text="No" translateX="175.0" />
-                              <CheckBox mnemonicParsing="false" text="Is Question" translateX="50.0">
+                              <Button fx:id="yes" mnemonicParsing="false" text="Yes" translateX="175.0" />
+                              <Button fx:id="no" mnemonicParsing="false" text="No" translateX="175.0" />
+                              <CheckBox fx:id="isQuestion" mnemonicParsing="false" text="Is Question" translateX="50.0">
                                  <font>
                                     <Font size="18.0" />
                                  </font>
@@ -56,7 +56,7 @@
       </SplitPane>
       <BorderPane prefHeight="200.0" prefWidth="200.0">
          <center>
-            <GridPane BorderPane.alignment="CENTER">
+            <GridPane fx:id="imageGrid" BorderPane.alignment="CENTER">
               <columnConstraints>
                 <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                 <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -71,9 +71,9 @@
          <bottom>
             <HBox prefHeight="24.0" prefWidth="295.0" BorderPane.alignment="CENTER">
                <children>
-                  <Button mnemonicParsing="false" text="&lt;3" />
-                  <Button alignment="CENTER" mnemonicParsing="false" text="Guess" textAlignment="CENTER" translateX="170.0" />
-                  <Button mnemonicParsing="false" text="X" translateX="335.0" />
+                  <Button fx:id="heart" mnemonicParsing="false" text="&lt;3" />
+                  <Button fx:id="guess" alignment="CENTER" mnemonicParsing="false" text="Guess" textAlignment="CENTER" translateX="170.0" />
+                  <Button fx:id="crossOut" mnemonicParsing="false" text="X" translateX="335.0" />
                </children>
             </HBox>
          </bottom>
