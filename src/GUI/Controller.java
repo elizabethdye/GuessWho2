@@ -1,5 +1,12 @@
 package GUI;
 
+import javafx.fxml.FXML;
+import javafx.scene.control.Button;
+import javafx.scene.control.CheckBox;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextArea;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.GridPane;
 import Game.CardSet;
 import Game.Deck;
 import Game.Game;
@@ -9,9 +16,32 @@ import Network.NetworkCommunication;
 import java.util.concurrent.ArrayBlockingQueue;
 
 public class Controller {
-	Game game;
-	int numCards;
-	CardSet cardSet;
+    @FXML
+    GridPane imageGrid;
+    @FXML
+    Button heart;
+    @FXML
+    Button crossOut;
+    @FXML
+    Button guess;
+    @FXML
+    TextArea conversation;
+    @FXML
+    ImageView profile;
+    @FXML
+    Label whoseTurn;
+    @FXML
+    TextArea inputText;
+    @FXML
+    CheckBox isQuestion;
+    @FXML
+    Button yes;
+    @FXML
+    Button no;
+    Game game;
+    int numCards;
+    CardSet cardSet;
+    
     ArrayBlockingQueue<NetworkCommunication> networkData;
 
     void presentData(){
