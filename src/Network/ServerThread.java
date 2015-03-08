@@ -15,24 +15,36 @@ public class ServerThread extends Thread{
 
     public ServerThread(int port) throws IOException {
         acceptor = new ServerSocket(port);
+        connection = new Socket();
     }
 
     public void run() {
         while(true){
             try {
                 acceptConnection();
+                if (!connection.isConnected()){
+                    continue;
+                }
                 BufferedReader socketReader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+                String line = socketReader.readLine();
+                System.out.println("recieved: " + line);
                 if (isStartCommand(socketReader.readLine())){
                     StringBuilder sb = new StringBuilder();
-                    String line = socketReader.readLine();
+                    line = socketReader.readLine();
+                    System.out.println("recieved: " + line);
                     while(!isEndCommand(line)){
                         sb.append(line);
+                        line = socketReader.readLine();
+                        System.out.println("recieved: " + line);
                     }
 
                     NetworkCommunication comm = getFromString(sb.toString());
 
                     manager.recieved.add(comm);
                 }
+
+                connection.close();
+
             } catch (IOException e) {
                 e.printStackTrace();
                 //todo: Get back to the user with the error
@@ -40,7 +52,6 @@ public class ServerThread extends Thread{
             finally {
                 //close everything
                 //acceptor.close();
-                //connection.close();
             }
         }
     }

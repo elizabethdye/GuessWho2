@@ -1,23 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.text.*?>
 <?import javafx.geometry.*?>
-<?import javafx.scene.image.*?>
 <?import javafx.scene.control.*?>
-<?import java.lang.*?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.*?>
-<?import javafx.scene.layout.GridPane?>
-
-<SplitPane dividerPositions="0.4498186215235792" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="605.0" prefWidth="829.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="GUI.Controller">
+<?import javafx.scene.text.Font?>
+<SplitPane dividerPositions="0.4909310761789601" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="622.0" prefWidth="829.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="GUI.Controller">
   <items>
       <SplitPane dividerPositions="0.7446102819237148" orientation="VERTICAL" prefHeight="200.0" prefWidth="160.0">
         <items>
-          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="213.0" prefWidth="295.0">
-               <children>
-                  <TextArea fx:id="conversation" editable="false" layoutY="-2.0" prefHeight="445.0" prefWidth="409.0" />
-               </children>
-            </AnchorPane>
-            <SplitPane dividerPositions="0.29347826086956524" prefHeight="160.0" prefWidth="200.0">
+            <TextArea fx:id="conversation" editable="false" prefHeight="445.0" prefWidth="409.0" />
+            <SplitPane dividerPositions="0.29347826086956524">
               <items>
                   <VBox prefHeight="150.0" prefWidth="117.0">
                      <children>
@@ -25,27 +18,38 @@
                         <Label text="Your Image" translateX="20.0" />
                      </children>
                   </VBox>
-                  <VBox prefHeight="200.0" prefWidth="100.0">
+                  <VBox prefHeight="200.0">
                      <children>
                         <Label fx:id="whoseTurn" text="Your Turn">
                            <font>
                               <Font size="24.0" />
                            </font>
                         </Label>
-                        <HBox prefHeight="100.0" prefWidth="200.0">
+                        <HBox prefHeight="96.0" prefWidth="280.0">
                            <children>
-                              <TextArea fx:id="inputText" prefHeight="60.0" prefWidth="265.0" />
+                              <TextArea fx:id="inputText" prefHeight="90.0" prefWidth="265.0" />
                            </children>
                         </HBox>
-                        <HBox prefHeight="10.0" prefWidth="256.0" translateY="13.0">
+                        <HBox alignment="CENTER_LEFT" translateY="13.0">
                            <children>
-                              <Button fx:id="yes" mnemonicParsing="false" text="Yes" translateX="175.0" />
-                              <Button fx:id="no" mnemonicParsing="false" text="No" translateX="175.0" />
-                              <CheckBox fx:id="isQuestion" mnemonicParsing="false" text="Is Question" translateX="50.0">
+                              <CheckBox fx:id="isQuestion" mnemonicParsing="false" text="Is Question">
                                  <font>
                                     <Font size="18.0" />
                                  </font>
+                                 <HBox.margin>
+                                    <Insets bottom="5.0" left="5.0" right="5.0" />
+                                 </HBox.margin>
                               </CheckBox>
+                              <Button fx:id="yes" mnemonicParsing="false" text="Yes">
+                                 <HBox.margin>
+                                    <Insets bottom="5.0" left="5.0" right="5.0" />
+                                 </HBox.margin>
+                              </Button>
+                              <Button fx:id="no" mnemonicParsing="false" text="No">
+                                 <HBox.margin>
+                                    <Insets bottom="5.0" left="5.0" right="5.0" />
+                                 </HBox.margin>
+                              </Button>
                            </children>
                         </HBox>
                      </children>
@@ -69,11 +73,20 @@
             </GridPane>
          </center>
          <bottom>
-            <HBox prefHeight="24.0" prefWidth="295.0" BorderPane.alignment="CENTER">
+            <HBox alignment="CENTER" prefHeight="32.0" prefWidth="417.0" BorderPane.alignment="CENTER">
                <children>
-                  <Button fx:id="heart" mnemonicParsing="false" text="&lt;3" />
-                  <Button fx:id="guess" alignment="CENTER" mnemonicParsing="false" text="Guess" textAlignment="CENTER" translateX="170.0" />
-                  <Button fx:id="crossOut" mnemonicParsing="false" text="X" translateX="335.0" />
+                  <Button fx:id="heart" mnemonicParsing="false" text="&lt;3">
+                     <HBox.margin>
+                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                     </HBox.margin></Button>
+                  <Button fx:id="guess" alignment="CENTER" mnemonicParsing="false" text="Guess" textAlignment="CENTER">
+                     <HBox.margin>
+                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                     </HBox.margin></Button>
+                  <Button fx:id="crossOut" mnemonicParsing="false" text="X">
+                     <HBox.margin>
+                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                     </HBox.margin></Button>
                </children>
             </HBox>
          </bottom>

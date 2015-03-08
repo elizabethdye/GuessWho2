@@ -1,7 +1,8 @@
 package Network;
 
 import java.io.IOException;
-import java.util.ArrayList;
+import java.net.Inet4Address;
+import java.net.UnknownHostException;
 import java.util.concurrent.ArrayBlockingQueue;
 
 
@@ -16,6 +17,7 @@ public class NetworkManager {
     }
 
     private NetworkManager() {
+        recieved = new ArrayBlockingQueue<NetworkCommunication>(2, true);
     }
 
     public void startServer() {
@@ -39,12 +41,7 @@ public class NetworkManager {
     }
 
     public void sendMessage(NetworkCommunication comm){
-        clientThread.toSend.add(comm);
-    }
-
-    ArrayList<String> getAvailableServers(){
-        //todo: implement
-        return new ArrayList<String>();
+        clientThread.addMessage(comm);
     }
 
     public void endConnections() {
@@ -58,5 +55,22 @@ public class NetworkManager {
 
     public NetworkCommunication getLatest() throws InterruptedException {
         return recieved.take();
+    }
+
+    public String getLocalIP() throws UnknownHostException {
+        return Inet4Address.getLocalHost().getHostAddress();
+    }
+
+    public void test() throws UnknownHostException {
+        System.out.println("Starting Server");
+        int port = 8888;
+
+        startServer();
+        openConnection(getLocalIP(), port);
+
+        NetworkCommunication comm = new NetworkCommunication(Message.GUESS, "Hello!");
+        System.out.println("Sent message: Hello!");
+        sendMessage(comm);
+
     }
 }

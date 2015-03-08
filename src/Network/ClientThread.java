@@ -27,18 +27,17 @@ public class ClientThread extends Thread {
         try {
             sender = openConnection();
             writer = new BufferedWriter(new OutputStreamWriter(sender.getOutputStream()));
-            while(!finished){
-                if (sender != null){
-                    NetworkCommunication comm = (NetworkCommunication)toSend.take();
 
-                    writeToSocket(writer, ServerThread.START);
+            if (sender != null){
+                NetworkCommunication comm = (NetworkCommunication)toSend.take();
 
-                    writeHeader(writer, comm.header);
+                writeToSocket(writer, ServerThread.START);
 
-                    writeToSocket(writer, comm.data);
+                writeHeader(writer, comm.header);
 
-                    writeToSocket(writer, ServerThread.END);
-                }
+                writeToSocket(writer, comm.data);
+
+                writeToSocket(writer, ServerThread.END);
             }
 
             writer.close();
@@ -71,6 +70,10 @@ public class ClientThread extends Thread {
             e.printStackTrace();
         }
         return null;
+    }
+
+    public void addMessage(NetworkCommunication comm){
+        this.toSend.add(comm);
     }
     boolean isValidHeader(String header) {
         return header != null && !header.equals("NONE");
