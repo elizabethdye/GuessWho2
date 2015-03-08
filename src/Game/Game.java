@@ -4,11 +4,11 @@ public class Game {//handles basic game rules
 	private Player p1, p2;
 	private boolean p1Turn, gameOver;
 	
-	public Game(int numCards, CardSets images) {
-		p1=new Player(numCards, images);
-		p2=new Player(numCards, images);
+	public Game(Deck deck) {	
+		p1=new Player(deck);
+		p2=new Player(deck);
 		p1Turn=true;
-		gameOver=false; //TODO if gameOver, boxes are noneditable
+		gameOver=false;
 	}
 	
 	private void turn() {
@@ -68,5 +68,8 @@ public class Game {//handles basic game rules
 			}
 			removePenalty(p2);
 		}
+	}
+	boolean isEditable() {
+		return !gameOver;
 	}
 }

@@ -1,12 +1,12 @@
 package Game;
 
-public class Deck {//deck used in game, made from size elements from preset CardSets
+public class Deck {
 	private Card[] cards;
-	private CardSets images;
+	private CardSet set;
 	
-	public Deck(int size, CardSets images) {
+	public Deck(int size, CardSet set) {
 		this.cards=new Card[size];
-		this.images=images;
+		this.set=set;
 		setUpCards();
 	}
 	public int getSize() {
@@ -16,11 +16,9 @@ public class Deck {//deck used in game, made from size elements from preset Card
 		return cards[index];
 	}
 	private void setUpCards() {
-		String name;
-		images.randomize();
+		set.randomize();
 		for (int i=0; i<cards.length; i++) {
-			name=images.getName(i);
-			cards[i]=new Card(name,images.getImage(name));
+			cards[i]=set.getCard(i);
 		}
 	}
 }

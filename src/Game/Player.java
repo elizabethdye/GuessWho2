@@ -7,11 +7,11 @@ public class Player {
 	private Card card;
 	private Random rand=new Random();
 	private boolean penalized;
-	
-	public Player(int size, CardSets images) {
-		deck=new Deck(size, images);
-		card=deck.getCard(rand.nextInt(deck.getSize()));
-		penalized=true;
+
+	public Player(Deck deck) {
+		this.deck=deck;
+		card=getRandomCard();
+		penalized=false;
 	}
 	boolean isCorrectCard(Card card) {
 		return this.card==card;
@@ -21,5 +21,9 @@ public class Player {
 	}
 	void setPenalized(boolean b) {
 		penalized=b;
+	}
+	
+	private Card getRandomCard() {
+		return deck.getCard(rand.nextInt(deck.getSize()));
 	}
 }
