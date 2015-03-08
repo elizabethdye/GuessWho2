@@ -7,7 +7,7 @@ import java.util.concurrent.ArrayBlockingQueue;
 
 public class NetworkManager {
     private static NetworkManager ourInstance = new NetworkManager();
-    public ArrayBlockingQueue<NetworkCommunication> recieved;
+    ArrayBlockingQueue<NetworkCommunication> recieved;
     Thread serverThread;
     ClientThread clientThread;
 
@@ -18,7 +18,7 @@ public class NetworkManager {
     private NetworkManager() {
     }
 
-    void startServer() {
+    public void startServer() {
         ServerThread thread = null;
         try {
             thread = new ServerThread(8888);
@@ -30,7 +30,7 @@ public class NetworkManager {
 
     }
 
-    void openConnection(String ip, int port) {
+    public void openConnection(String ip, int port) {
         if (!channelSetup()){
             return;
         }
@@ -38,7 +38,7 @@ public class NetworkManager {
         clientThread.start();
     }
 
-    void sendMessage(NetworkCommunication comm){
+    public void sendMessage(NetworkCommunication comm){
         clientThread.toSend.add(comm);
     }
 
@@ -47,7 +47,7 @@ public class NetworkManager {
         return new ArrayList<String>();
     }
 
-    void endConnections() {
+    public void endConnections() {
         serverThread.interrupt();
         clientThread.stopThread(); //custom clean stopper
     }
@@ -56,7 +56,7 @@ public class NetworkManager {
         return recieved != null;
     }
 
-    NetworkCommunication getLatest() throws InterruptedException {
+    public NetworkCommunication getLatest() throws InterruptedException {
         return recieved.take();
     }
 }
