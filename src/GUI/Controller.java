@@ -64,4 +64,18 @@ public class Controller {
     	cardSet=set.toCardSet(); //temp
     	//TODO see chooseNumCards
     }
+
+    @FXML
+    void sendTestPackets() {
+        String ip = inputText.getText();
+        if (ip.length() > 0) {
+            NetworkManager.getInstance().test(ip);
+        }
+    }
+
+    @FXML
+    void initialize(){
+        String ip = manager.getLocalIP();
+        conversation.appendText("Your IP: " + manager.getLocalIP() + '\n');
+    }
 }

@@ -57,16 +57,20 @@ public class NetworkManager {
         return recieved.take();
     }
 
-    public String getLocalIP() throws UnknownHostException {
-        return Inet4Address.getLocalHost().getHostAddress();
+    public String getLocalIP() {
+        try {
+            return Inet4Address.getLocalHost().getHostAddress();
+        } catch (UnknownHostException e) {
+            return "Couldn't Aquire your IP";
+        }
     }
 
-    public void test() throws UnknownHostException {
+    public void test(String IP) {
         System.out.println("Starting Server");
         int port = 8888;
 
         startServer();
-        openConnection(getLocalIP(), port);
+        openConnection(IP, port);
 
         NetworkCommunication comm = new NetworkCommunication(Message.GUESS, "Hello!");
         System.out.println("Sent message: Hello!");

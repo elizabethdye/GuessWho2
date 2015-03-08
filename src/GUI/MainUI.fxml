@@ -40,12 +40,12 @@
                                     <Insets bottom="5.0" left="5.0" right="5.0" />
                                  </HBox.margin>
                               </CheckBox>
-                              <Button fx:id="yes" mnemonicParsing="false" text="Yes">
+                              <Button fx:id="yes" mnemonicParsing="false" onAction="#sendTestPackets" text="Yes" translateX="-120.0">
                                  <HBox.margin>
                                     <Insets bottom="5.0" left="5.0" right="5.0" />
                                  </HBox.margin>
                               </Button>
-                              <Button fx:id="no" mnemonicParsing="false" text="No">
+                              <Button fx:id="no" mnemonicParsing="false" text="No" translateX="-110.0">
                                  <HBox.margin>
                                     <Insets bottom="5.0" left="5.0" right="5.0" />
                                  </HBox.margin>
