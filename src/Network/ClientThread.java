@@ -15,6 +15,7 @@ public class ClientThread extends Thread {
     BufferedWriter writer;
     public ArrayBlockingQueue toSend;
     boolean finished;
+    public static final String seperator = "|";
 
     public ClientThread(String destinationIP, int port){
         this.destinationIP = destinationIP;
@@ -31,12 +32,10 @@ public class ClientThread extends Thread {
             if (sender != null){
                 NetworkCommunication comm = (NetworkCommunication)toSend.take();
 
-                writeToSocket(writer, ServerThread.START);
+                String toSend = comm.header + seperator + comm.data;
 
-                writeHeader(writer, comm.header);
-
-                writeToSocket(writer, comm.data);
-
+                writeToSocket(writer, ServerThread.START + "\n");
+                writeToSocket(writer, toSend + "\n");
                 writeToSocket(writer, ServerThread.END);
             }
 

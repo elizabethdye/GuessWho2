@@ -74,6 +74,15 @@ public class Controller {
     }
 
     @FXML
+    void loadFromQueue() {
+        try {
+            conversation.appendText(manager.getLatest().toString());
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
     void initialize(){
         String ip = manager.getLocalIP();
         conversation.appendText("Your IP: " + manager.getLocalIP() + '\n');

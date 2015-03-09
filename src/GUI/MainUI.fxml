@@ -45,7 +45,7 @@
                                     <Insets bottom="5.0" left="5.0" right="5.0" />
                                  </HBox.margin>
                               </Button>
-                              <Button fx:id="no" mnemonicParsing="false" text="No" translateX="-110.0">
+                              <Button fx:id="no" mnemonicParsing="false" onAction="#loadFromQueue" text="No" translateX="-110.0">
                                  <HBox.margin>
                                     <Insets bottom="5.0" left="5.0" right="5.0" />
                                  </HBox.margin>

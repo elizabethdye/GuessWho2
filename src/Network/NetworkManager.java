@@ -18,6 +18,7 @@ public class NetworkManager {
 
     private NetworkManager() {
         recieved = new ArrayBlockingQueue<NetworkCommunication>(2, true);
+        startServer();
     }
 
     public void startServer() {
@@ -26,6 +27,7 @@ public class NetworkManager {
             thread = new ServerThread(8888);
             serverThread = new Thread(thread);
             serverThread.start();
+
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -57,6 +59,10 @@ public class NetworkManager {
         return recieved.take();
     }
 
+    public void addComm(NetworkCommunication comm){
+        recieved.add(comm);
+    }
+
     public String getLocalIP() {
         try {
             return Inet4Address.getLocalHost().getHostAddress();
@@ -69,7 +75,6 @@ public class NetworkManager {
         System.out.println("Starting Server");
         int port = 8888;
 
-        startServer();
         openConnection(IP, port);
 
         NetworkCommunication comm = new NetworkCommunication(Message.GUESS, "Hello!");

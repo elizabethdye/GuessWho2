@@ -9,38 +9,39 @@ import java.net.Socket;
 public class ServerThread extends Thread{
     ServerSocket acceptor;
     Socket connection;
-    NetworkManager manager = NetworkManager.getInstance();
+    NetworkManager manager;
 
     public static final String START = "START", END = "END";
 
     public ServerThread(int port) throws IOException {
         acceptor = new ServerSocket(port);
         connection = new Socket();
+        manager = NetworkManager.getInstance();
     }
 
     public void run() {
+        System.out.println("Server Started");
         while(true){
             try {
                 acceptConnection();
-                if (!connection.isConnected()){
+                if (!connection.isConnected() || connection.isClosed()){
                     continue;
                 }
+                System.out.println("connection accepted from: " + connection.getInetAddress().getHostName() + " (" + connection.getInetAddress().getHostAddress() + ")");
                 BufferedReader socketReader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
                 String line = socketReader.readLine();
-                System.out.println("recieved: " + line);
-                if (isStartCommand(socketReader.readLine())){
-                    StringBuilder sb = new StringBuilder();
+                if (isStartCommand(line)){
                     line = socketReader.readLine();
-                    System.out.println("recieved: " + line);
-                    while(!isEndCommand(line)){
-                        sb.append(line);
-                        line = socketReader.readLine();
-                        System.out.println("recieved: " + line);
+
+                    System.out.println(line);
+
+                    NetworkCommunication comm = getFromString(line);
+                    System.out.println(comm.toString());
+
+                    if (manager == null){
+                        manager = NetworkManager.getInstance();
                     }
-
-                    NetworkCommunication comm = getFromString(sb.toString());
-
-                    manager.recieved.add(comm);
+                    manager.addComm(comm);
                 }
 
                 connection.close();
@@ -57,7 +58,7 @@ public class ServerThread extends Thread{
     }
 
     void acceptConnection() throws IOException {
-        if (connection.isClosed()) {
+        if (!connection.isConnected() || connection.isClosed()) {
             connection = acceptor.accept();
         }
     }
@@ -70,7 +71,9 @@ public class ServerThread extends Thread{
     }
 
     NetworkCommunication getFromString(String s){
-        String[] lines = s.split("\n");
+
+        String[] lines = s.split("\\|"); // Can't use the final variable in ClientThread because it will evaluate '|' to and empty String
+        System.out.println("Line: " + s + ", First: " + lines[0] + ", Second: " + lines[1]);
         Message type = Message.fromString(lines[0]);
         String data = "";
         for (int i = 1; i < lines.length; ++i){

@@ -10,4 +10,8 @@ public class NetworkCommunication {
         this.header = t.toString();
         this.data = data;
     }
+
+    public String toString(){
+        return "Type: " + type.toString() + ", Data: " + data;
+    }
 }
