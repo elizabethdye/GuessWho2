@@ -69,7 +69,7 @@ public class Game {//handles basic game rules
 			removePenalty(p2);
 		}
 	}
-	boolean isEditable() {
+	public boolean isEditable() {
 		return !gameOver;
 	}
 }

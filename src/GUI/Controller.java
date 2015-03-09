@@ -37,9 +37,10 @@ public class Controller {
     Button yes;
     @FXML
     Button no;
-    Game game;
-    int numCards;
-    CardSet cardSet;
+    
+    private Game game;
+    private int numCards;
+    private CardSet cardSet;
 
     NetworkManager manager = NetworkManager.getInstance();
 
@@ -51,20 +52,6 @@ public class Controller {
             e.printStackTrace();
         }
     }
-    private void startGame() {
-    	Deck deck=new Deck(numCards, cardSet);
-    	game=new Game(deck);
-    }
-    private void chooseNumCards() {
-    	numCards=25; //temp
-    	//TODO not sure best way to do this. perhaps small window with choice/combobox upon starting game that requests num
-    }
-    private void chooseCardSet() {//choose cards first
-    	CardSets set=CardSets.SUPERHEROES;
-    	cardSet=set.toCardSet(); //temp
-    	//TODO see chooseNumCards
-    }
-
     @FXML
     void sendTestPackets() {
         String ip = inputText.getText();
@@ -86,5 +73,22 @@ public class Controller {
     void initialize(){
         String ip = manager.getLocalIP();
         conversation.appendText("Your IP: " + manager.getLocalIP() + '\n');
+    }
+    
+    private void startGame() {
+    	Deck deck=new Deck(numCards, cardSet);
+    	game=new Game(deck);
+    }
+    private void chooseNumCards() {
+    	numCards=25; //temp
+    	//TODO not sure best way to do this. perhaps small window with choice/combobox upon starting game that requests num
+    }
+    private void chooseCardSet() {//choose cards first
+    	CardSets set=CardSets.SUPERHEROES;
+    	cardSet=set.toCardSet(); //temp
+    	//TODO see chooseNumCards
+    }
+    private boolean isEditable() {
+    	return game.isEditable();
     }
 }
