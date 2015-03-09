@@ -63,7 +63,7 @@ public class Controller {
     @FXML
     void loadFromQueue() {
         try {
-            conversation.appendText(manager.getLatest().toString());
+            conversation.appendText(manager.getLatest().toString() + "\n");
         } catch (InterruptedException e) {
             e.printStackTrace();
         }

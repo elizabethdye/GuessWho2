@@ -21,16 +21,16 @@ public class ServerThread extends Thread{
 
     public void run() {
         System.out.println("Server Started");
-        while(true){
+        while (true) {
             try {
                 acceptConnection();
-                if (!connection.isConnected() || connection.isClosed()){
+                if (!connection.isConnected() || connection.isClosed()) {
                     continue;
                 }
                 System.out.println("connection accepted from: " + connection.getInetAddress().getHostName() + " (" + connection.getInetAddress().getHostAddress() + ")");
                 BufferedReader socketReader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
                 String line = socketReader.readLine();
-                if (isStartCommand(line)){
+                if (isStartCommand(line)) {
                     line = socketReader.readLine();
 
                     System.out.println(line);
@@ -38,7 +38,7 @@ public class ServerThread extends Thread{
                     NetworkCommunication comm = getFromString(line);
                     System.out.println(comm.toString());
 
-                    if (manager == null){
+                    if (manager == null) {
                         manager = NetworkManager.getInstance();
                     }
                     manager.addComm(comm);
@@ -48,14 +48,27 @@ public class ServerThread extends Thread{
 
             } catch (IOException e) {
                 e.printStackTrace();
+                manager.reportError(e.toString());
                 //todo: Get back to the user with the error
-            }
-            finally {
+            } finally {
                 //close everything
                 //acceptor.close();
+
+                try {
+                    if (!acceptor.isClosed()) {
+                        acceptor.close();
+                    }
+                    if (!connection.isClosed()) {
+                        connection.close();
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
         }
     }
+
+
 
     void acceptConnection() throws IOException {
         if (!connection.isConnected() || connection.isClosed()) {

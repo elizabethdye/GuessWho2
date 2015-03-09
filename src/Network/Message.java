@@ -2,7 +2,7 @@ package Network;
 
 
 public enum Message {
-    TEXT, GUESS, RESPONSE, QUESTION, AUTODISCOVER, NONE;
+    TEXT, GUESS, RESPONSE, QUESTION, AUTODISCOVER, ERROR, NONE;
 
     public String toString() {
         switch (this){

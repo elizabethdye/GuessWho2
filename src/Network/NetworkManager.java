@@ -29,7 +29,7 @@ public class NetworkManager {
             serverThread.start();
 
         } catch (IOException e) {
-            e.printStackTrace();
+            this.reportError(e.toString());
         }
 
     }
@@ -81,5 +81,10 @@ public class NetworkManager {
         System.out.println("Sent message: Hello!");
         sendMessage(comm);
 
+    }
+
+    public void reportError(String message){
+        NetworkCommunication comm = new NetworkCommunication(Message.ERROR, message);
+        this.addComm(comm);
     }
 }

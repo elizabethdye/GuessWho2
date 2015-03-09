@@ -43,9 +43,9 @@ public class ClientThread extends Thread {
             sender.close();
 
         } catch (IOException e) {
-            e.printStackTrace();
+            NetworkManager.getInstance().reportError(e.toString());
         } catch (InterruptedException e) {
-            e.printStackTrace();
+            NetworkManager.getInstance().reportError(e.toString());
         }
     }
 
@@ -61,14 +61,9 @@ public class ClientThread extends Thread {
         }
     }
 
-    public Socket openConnection(){
-        try {
-            Socket s = new Socket(destinationIP, port);
-            return s;
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return null;
+    public Socket openConnection() throws IOException {
+        Socket s = new Socket(destinationIP, port);
+        return s;
     }
 
     public void addMessage(NetworkCommunication comm){
