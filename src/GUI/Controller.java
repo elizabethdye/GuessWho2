@@ -4,6 +4,7 @@ import Game.CardSet;
 import Game.CardSets;
 import Game.Deck;
 import Game.Game;
+import Network.Message;
 import Network.NetworkCommunication;
 import Network.NetworkManager;
 import javafx.fxml.FXML;
@@ -70,9 +71,18 @@ public class Controller {
     }
 
     @FXML
+    void sendMessage(){
+        String message = inputText.getText();
+        NetworkCommunication comm = new NetworkCommunication(Message.TEXT, message);
+
+        manager.sendMessage(comm);
+    }
+
+    @FXML
     void initialize(){
         String ip = manager.getLocalIP();
         conversation.appendText("Your IP: " + manager.getLocalIP() + '\n');
+        manager.setDisplay(conversation);
     }
     
     private void startGame() {
