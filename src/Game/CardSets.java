@@ -13,4 +13,7 @@ public enum CardSets {
 				return new CardSet("null");//null?
 		}
 	}
+	public void addEnum() {
+		
+	}
 }

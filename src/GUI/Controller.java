@@ -129,7 +129,7 @@ public class Controller {
         }
         //todo: Finish the rest of the commands.
     }
-
+    @FXML
     private void yes() {
     	inputText.appendText("Yes");
     	game.turn();
