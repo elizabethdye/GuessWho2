@@ -53,11 +53,8 @@ public class Controller {
     private CardSet cardSet;
     private Deck deck;
 	private Card[][] cardGrid;
-<<<<<<< HEAD
 	private Player player;
-=======
 	private final int ipNum=8888;
->>>>>>> origin/master
     
 	NetworkManager manager = NetworkManager.getInstance();
     
@@ -69,7 +66,6 @@ public class Controller {
         updateUI runner = new updateUI(conversation);
         Platform.runLater(runner);
         startGame();
-        setUpGrid();
     }
     void presentData(){
         //called to display the most recently received event.
@@ -153,19 +149,17 @@ public class Controller {
     private void startGame() {
     	deck=new Deck(numCards, cardSet);
     	game=new Game(deck,numCards);
+        setUpGrid();
     }
     private void chooseNumCards() {
     	numCards=25; //temp
     }
-    private void chooseCardSet() {//choose cards first
-    	CardSets set=CardSets.EMOJIS;//temp
-    	cardSet=set.toCardSet();
+    private void chooseCardSet() {
     	//TODO see chooseNumCards
     }
     private boolean isEditable() {
     	return game.isEditable();
     }
-    
     private Node findNodeSelected() {
     	ObservableList<Node> cards = imageGrid.getChildren();
     	for(Node card: cards) {
@@ -185,17 +179,30 @@ public class Controller {
     }
     private void setUpGrid() {
     	Card tempCard;
+    	BufferedImage bufImage;
+    	Image image;
 		int width=(int) Math.sqrt(numCards);
 		cardGrid=new Card[width][width];
 		for (int idx=0; idx<width; idx++) {
 			for (int idy=0; idy<width; idy++) {
 				tempCard=deck.getCard(idx*width+idy);
 				cardGrid[idx][idy]=tempCard;
-				imageGrid.add(tempCard.getImage(), idx, idy);
+				bufImage=tempCard.getImage();
+				image=convertBufferedToImage(bufImage);
+				imageGrid.add(new ImageView(image), idx, idy);
 			}
 		}
     }
-
+    private void insertProfilePic() {
+    	BufferedImage playerImage = player.getCard().getImage();
+    	Image image = convertBufferedToImage(playerImage);
+    	profile.setImage(image);
+    }
+    private Image convertBufferedToImage(BufferedImage image) {
+    	return SwingFXUtils.toFXImage(image, null);
+    }
+    
+    
     public class updateUI implements Runnable{
 
         TextArea conv;
@@ -210,38 +217,11 @@ public class Controller {
                     if (comm.type == Message.TEXT){
                         this.conv.appendText(comm.data + "\n");
                     }
-                    //todo: fill out the rest of these
+                    //TODO: fill out the rest of these
                 }
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
         }
-    }
-<<<<<<< HEAD
-=======
-    
-    @FXML
-    public void favorite() {
-    	//TODO
-    	//Draw heart over selected node
-    	Node selected = findNodeSelected();
-    	int row = findRowSelected(selected);
-    	int col = findColumnSelected(selected);
-    }
-    
-    @FXML
-    public void crossOut() {
-    	//TODO Draw "X" over selected node
-    	Node selected = findNodeSelected();
-    	int row = findRowSelected(selected);
-    	int col = findColumnSelected(selected);
-    }
-    
-    private void insertProfilePic() {
-    	BufferedImage playerImage = player.getCard().getImage();
-    	Image image = SwingFXUtils.toFXImage(playerImage, null);
-    	profile.setImage(image);
-    }
-
->>>>>>> origin/master
+    }    
 }
