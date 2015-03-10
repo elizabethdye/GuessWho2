@@ -73,10 +73,6 @@ public class Controller {
         }
     }
     @FXML
-    void isCorrectGuess(){
-    	//TODO: if myGuess.equals() other person's card: return yes ~or~ if mycard.equals() other person's guess
-    }
-    @FXML
     void sendTestPackets() {
         String ip = inputText.getText();
         if (ip.length() > 0) {
@@ -118,6 +114,35 @@ public class Controller {
     	inputText.appendText("No");
     	game.turn();
     }
+    @FXML
+    public void favorite() {
+    	//TODO
+    	//Draw heart over selected node
+    	Node selected = findNodeSelected();
+    	int row = findRowSelected(selected);
+    	int col = findColumnSelected(selected);
+    }
+    @FXML
+    public void crossOut() {
+    	//TODO Draw "X" over selected node
+    	Node selected = findNodeSelected();
+    	int row = findRowSelected(selected);
+    	int col = findColumnSelected(selected);
+    }
+    @FXML
+    private void guess() {
+    	Node guessed = findNodeSelected();
+    	int row = findRowSelected(guessed);
+    	int col = findColumnSelected(guessed);
+    	if(guessed.equals(null)) {
+    		return;
+    	}
+    	if(game.p1Turn()) {
+    		game.p1Guess(cardGrid[row][col]);
+    	} else {
+    		game.p2Guess((Card)guessed);
+    	}
+    }
     private void startGame() {
     	deck=new Deck(numCards, cardSet);
     	game=new Game(deck,numCards);
@@ -151,22 +176,6 @@ public class Controller {
     private int findColumnSelected(Node node) {
     	return imageGrid.getColumnIndex(node);
     }
-    
-    @FXML
-    private void guess() {
-    	Node guessed = findNodeSelected();
-    	int row = findRowSelected(guessed);
-    	int col = findColumnSelected(guessed);
-    	if(guessed.equals(null)) {
-    		return;
-    	}
-    	if(game.p1Turn()) {
-    		game.p1Guess(cardGrid[row][col]);
-    	} else {
-    		game.p2Guess((Card)guessed);
-    	}
-    }
-
     private void setUpGrid() {
     	Card tempCard;
 		int width=(int) Math.sqrt(numCards);
@@ -175,7 +184,7 @@ public class Controller {
 			for (int idy=0; idy<width; idy++) {
 				tempCard=deck.getCard(idx*width+idy);
 				cardGrid[idx][idy]=tempCard;
-				imageGrid.add(tempCard, idx, idy);
+				imageGrid.add(tempCard.getImage(), idx, idy);
 			}
 		}
     }
@@ -201,22 +210,4 @@ public class Controller {
             }
         }
     }
-    
-    @FXML
-    public void favorite() {
-    	//TODO
-    	//Draw heart over selected node
-    	Node selected = findNodeSelected();
-    	int row = findRowSelected(selected);
-    	int col = findColumnSelected(selected);
-    }
-    
-    @FXML
-    public void crossOut() {
-    	//TODO Draw "X" over selected node
-    	Node selected = findNodeSelected();
-    	int row = findRowSelected(selected);
-    	int col = findColumnSelected(selected);
-    }
-
 }
