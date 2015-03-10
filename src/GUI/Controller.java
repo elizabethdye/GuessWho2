@@ -135,6 +135,7 @@ public class Controller {
         return comm.type == Message.TEXT || comm.type == Message.RESPONSE || comm.type == Message.QUESTION;
     }
 
+    @FXML
     private void yes() {
     	inputText.appendText("Yes");
 
