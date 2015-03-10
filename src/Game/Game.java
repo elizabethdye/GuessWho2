@@ -29,19 +29,25 @@ public class Game {//handles basic game rules
 		turn();
 	}
 	void p1Guess(Card card) {
-		if (p2.isCorrectCard(card.getName())) {
-			gameOver();	
-		}
-		else {
-			penalize(p1);
+		if (p1Turn) {
+			if (p2.isCorrectCard(card.getName())) {
+				gameOver();	
+			}
+			else {
+				penalize(p1);
+				p1Turn=false;
+			}
 		}
 	}
 	void p2Guess(Card card) {
-		if (p1.isCorrectCard(card.getName())) {
-			gameOver();	
-		}
-		else {
-			penalize(p2);
+		if (!p1Turn) {
+			if (p1.isCorrectCard(card.getName())) {
+				gameOver();	
+			}
+			else {
+				penalize(p2);
+				p1Turn=true;
+			}
 		}
 	}
 	void gameOver() {
