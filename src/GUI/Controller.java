@@ -7,6 +7,7 @@ import Game.Game;
 import Network.Message;
 import Network.NetworkCommunication;
 import Network.NetworkManager;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
@@ -14,6 +15,9 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
+
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class Controller {
     @FXML
@@ -88,6 +92,31 @@ public class Controller {
         String ip = manager.getLocalIP();
         conversation.appendText("Your IP: " + manager.getLocalIP() + '\n');
         manager.setDisplay(conversation);
+
+        Timer t = new Timer();
+        t.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                if (manager.numItems() > 0){
+                    Platform.runLater(()->{
+                        try {
+                            NetworkCommunication comm = manager.getLatest();
+                            handleCommand(comm);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+
+                    });
+                }
+            }
+        }, 0, 200);
+    }
+
+    public void handleCommand(NetworkCommunication command){
+        if (command.type == Message.TEXT){
+            conversation.appendText(command.data);
+        }
+        //todo: Finish the rest of the commands.
     }
     
     private void startGame() {

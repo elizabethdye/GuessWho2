@@ -100,4 +100,8 @@ public class NetworkManager {
         NetworkCommunication comm = new NetworkCommunication(Message.ERROR, message);
         this.addComm(comm);
     }
+
+    public int numItems() {
+        return received.size();
+    }
 }
