@@ -123,20 +123,33 @@ public class Controller {
         //setUpGrid();
     }
 
-    public void handleCommand(NetworkCommunication command) {
-        if (command.type == Message.TEXT) {
-            conversation.appendText(command.data);
+    public void handleCommand(NetworkCommunication communication) {
+        if (shouldPrint(communication)) {
+            conversation.appendText(communication.data);
         }
+
         //todo: Finish the rest of the commands.
+    }
+
+    private boolean shouldPrint(NetworkCommunication comm){
+        return comm.type == Message.TEXT || comm.type == Message.RESPONSE || comm.type == Message.QUESTION;
     }
 
     private void yes() {
     	inputText.appendText("Yes");
+
+        NetworkCommunication comm = new NetworkCommunication(Message.RESPONSE, "Yes!");
+        manager.sendMessage(comm);
+
     	game.turn();
     }
     @FXML
     private void no() {
     	inputText.appendText("No");
+
+        NetworkCommunication comm = new NetworkCommunication(Message.RESPONSE, "No!");
+        manager.sendMessage(comm);
+
     	game.turn();
     }
     @FXML
