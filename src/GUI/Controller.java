@@ -9,12 +9,7 @@ import javafx.collections.ObservableList;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
-import javafx.scene.control.Button;
-import javafx.scene.control.CheckBox;
-import javafx.scene.control.ChoiceBox;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
@@ -66,6 +61,7 @@ public class Controller {
 	private Card[][] cardGrid;
 	private Player player;
 	private final int ipNum=8888;
+    public boolean gameStarted = false;
     
 	NetworkManager manager = NetworkManager.getInstance();
 
@@ -105,9 +101,9 @@ public class Controller {
         }
         NetworkCommunication comm = new NetworkCommunication(Message.TEXT, message);
 
-        manager.openConnection(ip, ipNum);
-        
-        manager.sendMessage(comm);
+        if (gameStarted){
+            manager.sendMessage(comm);
+        }
     }
     @FXML
     void initialize(){
@@ -131,11 +127,8 @@ public class Controller {
 
                     });
                 }
-                else {
-                    System.out.println("Empty");
-                }
             }
-        }, 0, 200);
+        }, 1000, 800);
 
         //startGame();
         //setUpGrid();
@@ -147,6 +140,12 @@ public class Controller {
         }
 
         //todo: Finish the rest of the commands.
+    }
+
+    @FXML
+    public void initializeGame(){
+        manager.openConnection(ipAddress.getText(), 8888);
+        gameStarted = true;
     }
 
     private boolean shouldPrint(NetworkCommunication comm){
