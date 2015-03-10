@@ -214,31 +214,10 @@ public class Controller {
             }
         }
     }
-<<<<<<< HEAD
-=======
-    
-    @FXML
-    public void favorite() {
-    	//TODO
-    	//Draw heart over selected node
-    	Node selected = findNodeSelected();
-    	int row = findRowSelected(selected);
-    	int col = findColumnSelected(selected);
-    }
-    
-    @FXML
-    public void crossOut() {
-    	//TODO Draw "X" over selected node
-    	Node selected = findNodeSelected();
-    	int row = findRowSelected(selected);
-    	int col = findColumnSelected(selected);
-    }
-    
     private void insertProfilePic() {
     	BufferedImage playerImage = player.getCard().getImage();
     	Image image = SwingFXUtils.toFXImage(playerImage, null);
     	profile.setImage(image);
     }
 
->>>>>>> origin/master
 }
