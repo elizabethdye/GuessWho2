@@ -116,6 +116,9 @@ public class Controller {
 
                     });
                 }
+                else {
+                    System.out.println("Empty");
+                }
             }
         }, 0, 200);
 
@@ -240,27 +243,4 @@ public class Controller {
     private Image convertBufferedToImage(BufferedImage image) {
     	return SwingFXUtils.toFXImage(image, null);
     }
-    
-    
-    public class updateUI implements Runnable{
-
-        TextArea conv;
-
-        public updateUI(TextArea conv){
-            this.conv = conv;
-        }
-        public void run(){
-            try {
-                while(true){
-                    NetworkCommunication comm = manager.getLatest();
-                    if (comm.type == Message.TEXT){
-                        this.conv.appendText(comm.data + "\n");
-                    }
-                    //TODO: fill out the rest of these
-                }
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
-    } 	
 }
