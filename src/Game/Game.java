@@ -31,7 +31,9 @@ public class Game {//handles basic game rules
 		//TODO print No
 		turn();
 	}
-	void p1Guess(Card card) {
+
+
+	public void p1Guess(Card card) {
 		if (p1Turn) {
 			if (p2.isCorrectCard(card.getName())) {
 				gameOver();	
@@ -42,7 +44,7 @@ public class Game {//handles basic game rules
 			}
 		}
 	}
-	void p2Guess(Card card) {
+	public void p2Guess(Card card) {
 		if (!p1Turn) {
 			if (p1.isCorrectCard(card.getName())) {
 				gameOver();	
@@ -80,5 +82,8 @@ public class Game {//handles basic game rules
 	}
 	public boolean isEditable() {
 		return !gameOver;
+	}
+	public boolean p1Turn() {
+		return p1Turn;
 	}
 }

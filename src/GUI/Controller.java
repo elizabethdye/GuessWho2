@@ -1,5 +1,6 @@
 package GUI;
 
+import Game.Card;
 import Game.CardSet;
 import Game.CardSets;
 import Game.Deck;
@@ -7,8 +8,10 @@ import Game.Game;
 import Network.Message;
 import Network.NetworkCommunication;
 import Network.NetworkManager;
+import javafx.collections.ObservableList;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
+import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
@@ -122,6 +125,29 @@ public class Controller {
     }
     private boolean isEditable() {
     	return game.isEditable();
+    }
+    
+    private Card findCardSelected() {
+    	ObservableList<Node> cards = imageGrid.getChildren();
+    	for(Node card: cards) {
+    		if(card.isFocused()) {
+    			return (Card) card;
+    		}
+    	}
+    	return null;
+    }
+    
+    @FXML
+    private void guess() {
+    	Card guessed = findCardSelected();
+    	if(guessed.equals(null)) {
+    		return;
+    	}
+    	if(game.p1Turn()) {
+    		game.p1Guess(guessed);
+    	} else {
+    		game.p2Guess(guessed);
+    	}
     }
 
 
