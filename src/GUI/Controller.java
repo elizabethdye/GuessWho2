@@ -48,11 +48,21 @@ public class Controller {
     private Game game;
     private int numCards;
     private CardSet cardSet;
+    private Deck deck;
 	private Card[][] cardGrid;
     
-
-    NetworkManager manager = NetworkManager.getInstance();
-
+	NetworkManager manager = NetworkManager.getInstance();
+    
+	@FXML
+    void initialize(){
+        String ip = manager.getLocalIP();
+        conversation.appendText("Your IP: " + manager.getLocalIP() + '\n');
+        manager.setDisplay(conversation);
+        updateUI runner = new updateUI(conversation);
+        Platform.runLater(runner);
+        startGame();
+        setUpGrid();
+    }
     void presentData(){
         //called to display the most recently received event.
         try {
@@ -97,16 +107,6 @@ public class Controller {
         
         manager.sendMessage(comm);
     }
-
-    @FXML
-    void initialize(){
-        String ip = manager.getLocalIP();
-        conversation.appendText("Your IP: " + manager.getLocalIP() + '\n');
-        manager.setDisplay(conversation);
-        updateUI runner = new updateUI(conversation);
-        Platform.runLater(runner);
-        setUpGrid();
-    }
     @FXML
     void yes() {
     	inputText.appendText("Yes");
@@ -116,7 +116,7 @@ public class Controller {
     	inputText.appendText("No");
     }
     private void startGame() {
-    	Deck deck=new Deck(numCards, cardSet);
+    	deck=new Deck(numCards, cardSet);
     	game=new Game(deck,numCards);
     }
     private void chooseNumCards() {
@@ -155,8 +155,16 @@ public class Controller {
     }
 
     private void setUpGrid() {
+    	Card tempCard;
 		int width=(int) Math.sqrt(numCards);
 		cardGrid=new Card[width][width];
+		for (int idx=0; idx<width; idx++) {
+			for (int idy=0; idy<width; idy++) {
+				tempCard=deck.getCard(idx*width+idy);
+				cardGrid[idx][idy]=tempCard;
+				imageGrid.add(tempCard, idx, idy);
+			}
+		}
     }
 
     public class updateUI implements Runnable{
