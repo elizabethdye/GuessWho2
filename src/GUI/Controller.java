@@ -53,7 +53,11 @@ public class Controller {
     private CardSet cardSet;
     private Deck deck;
 	private Card[][] cardGrid;
+<<<<<<< HEAD
 	private Player player;
+=======
+	private final int ipNum=8888;
+>>>>>>> origin/master
     
 	NetworkManager manager = NetworkManager.getInstance();
     
@@ -107,17 +111,19 @@ public class Controller {
         }
         NetworkCommunication comm = new NetworkCommunication(Message.TEXT, message);
 
-        manager.openConnection(ip, 8888);
+        manager.openConnection(ip, ipNum);
         
         manager.sendMessage(comm);
     }
     @FXML
-    void yes() {
+    private void yes() {
     	inputText.appendText("Yes");
+    	game.turn();
     }
     @FXML
-    void no() {
+    private void no() {
     	inputText.appendText("No");
+    	game.turn();
     }
     private void startGame() {
     	deck=new Deck(numCards, cardSet);
