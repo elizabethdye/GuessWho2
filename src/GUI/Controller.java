@@ -5,6 +5,7 @@ import Game.CardSet;
 import Game.CardSets;
 import Game.Deck;
 import Game.Game;
+import Network.Message;
 import Network.NetworkCommunication;
 import Network.NetworkManager;
 import javafx.collections.ObservableList;
@@ -44,6 +45,7 @@ public class Controller {
     private Game game;
     private int numCards;
     private CardSet cardSet;
+    
 
     NetworkManager manager = NetworkManager.getInstance();
 
@@ -54,6 +56,10 @@ public class Controller {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+    }
+    @FXML
+    void isCorrectGuess(){
+    	//TODO: if myGuess.equals() other person's card: return yes ~or~ if mycard.equals() other person's guess
     }
     @FXML
     void sendTestPackets() {
@@ -73,9 +79,18 @@ public class Controller {
     }
 
     @FXML
+    void sendMessage(){
+        String message = inputText.getText();
+        NetworkCommunication comm = new NetworkCommunication(Message.TEXT, message);
+
+        manager.sendMessage(comm);
+    }
+
+    @FXML
     void initialize(){
         String ip = manager.getLocalIP();
         conversation.appendText("Your IP: " + manager.getLocalIP() + '\n');
+        manager.setDisplay(conversation);
     }
     
     private void startGame() {
@@ -87,8 +102,8 @@ public class Controller {
     	//TODO not sure best way to do this. perhaps small window with choice/combobox upon starting game that requests num
     }
     private void chooseCardSet() {//choose cards first
-    	CardSets set=CardSets.SUPERHEROES;
-    	cardSet=set.toCardSet(); //temp
+    	CardSets set=CardSets.EMOJIS;//temp
+    	cardSet=set.toCardSet();
     	//TODO see chooseNumCards
     }
     private boolean isEditable() {

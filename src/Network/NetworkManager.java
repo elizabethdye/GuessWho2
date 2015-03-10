@@ -1,5 +1,7 @@
 package Network;
 
+import javafx.scene.control.TextArea;
+
 import java.io.IOException;
 import java.net.Inet4Address;
 import java.net.UnknownHostException;
@@ -11,6 +13,7 @@ public class NetworkManager {
     ArrayBlockingQueue<NetworkCommunication> received;
     Thread serverThread;
     ClientThread clientThread;
+    TextArea display;
 
     public static NetworkManager getInstance() {
         return ourInstance;
@@ -19,6 +22,11 @@ public class NetworkManager {
     private NetworkManager() {
         received = new ArrayBlockingQueue<NetworkCommunication>(2, true);
         startServer();
+        display = null;
+    }
+
+    public void setDisplay(TextArea text){
+        display = text;
     }
 
     public void startServer() {
@@ -60,7 +68,12 @@ public class NetworkManager {
     }
 
     public void addComm(NetworkCommunication comm){
-        received.add(comm);
+        if (comm.type == Message.TEXT && display != null){
+            display.appendText(comm.data + "\n");
+        }
+        else {
+            received.add(comm);
+        }
     }
 
     public String getLocalIP() {

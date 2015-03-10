@@ -28,20 +28,28 @@ public class Game {//handles basic game rules
 		//TODO print No
 		turn();
 	}
-	public void p1Guess(Card card) {
-		if (p2.isCorrectCard(card)) {
-			gameOver();	
-		}
-		else {
-			penalize(p1);
+
+
+	void p1Guess(Card card) {
+		if (p1Turn) {
+			if (p2.isCorrectCard(card.getName())) {
+				gameOver();	
+			}
+			else {
+				penalize(p1);
+				p1Turn=false;
+			}
 		}
 	}
-	public void p2Guess(Card card) {
-		if (p1.isCorrectCard(card)) {
-			gameOver();	
-		}
-		else {
-			penalize(p2);
+	void p2Guess(Card card) {
+		if (!p1Turn) {
+			if (p1.isCorrectCard(card.getName())) {
+				gameOver();	
+			}
+			else {
+				penalize(p2);
+				p1Turn=true;
+			}
 		}
 	}
 	void gameOver() {
