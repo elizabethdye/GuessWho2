@@ -6,8 +6,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.layout.BorderPane?>
 
-
-<BorderPane prefHeight="265.0" prefWidth="432.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8">
+<BorderPane prefHeight="265.0" prefWidth="432.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="GUI.OpeningController">
    <center>
       <VBox alignment="CENTER" prefHeight="292.0" prefWidth="432.0" BorderPane.alignment="CENTER">
          <children>
@@ -23,19 +22,19 @@
             <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
                <children>
                   <Label text="IP Address: " />
-                  <TextField alignment="CENTER" />
+                  <TextField fx:id="ipAddress" alignment="CENTER" onAction="#setIPAddress" />
                </children>
             </HBox>
             <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
                <children>
                   <Label text="Card Set: " />
-                  <ChoiceBox prefWidth="150.0" />
+                  <ChoiceBox fx:id="cardSet" onDragDetected="#cardSetChoice" prefWidth="150.0" />
                </children>
             </HBox>
             <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
                <children>
                   <Label text="# of Cards: " />
-                  <ChoiceBox prefWidth="150.0">
+                  <ChoiceBox fx:id="numCards" onDragDetected="#numCardChoice" prefWidth="150.0">
                      <contextMenu>
                         <ContextMenu>
                           <items>
@@ -50,7 +49,7 @@
             </HBox>
             <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
                <children>
-                  <Button mnemonicParsing="false" text="Start Game" />
+                  <Button fx:id="startGame" mnemonicParsing="false" onAction="#startGame" text="Start Game" />
                </children>
             </HBox>
          </children>
