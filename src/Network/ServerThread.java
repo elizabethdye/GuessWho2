@@ -24,12 +24,14 @@ public class ServerThread extends Thread{
         while (true) {
             try {
                 acceptConnection();
-                if (!connection.isConnected() || connection.isClosed()) {
+                if (connectionClosed()){
                     continue;
                 }
+
                 System.out.println("connection accepted from: " + connection.getInetAddress().getHostName() + " (" + connection.getInetAddress().getHostAddress() + ")");
                 BufferedReader socketReader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
                 String line = socketReader.readLine();
+
                 if (isStartCommand(line)) {
                     line = socketReader.readLine();
 
@@ -43,13 +45,11 @@ public class ServerThread extends Thread{
                     }
                     manager.addComm(comm);
                 }
-
                 connection.close();
 
             } catch (IOException e) {
                 e.printStackTrace();
                 manager.reportError(e.toString());
-                //todo: Get back to the user with the error
             } finally {
                 //close everything
                 //acceptor.close();
@@ -71,10 +71,15 @@ public class ServerThread extends Thread{
 
 
     void acceptConnection() throws IOException {
-        if (!connection.isConnected() || connection.isClosed()) {
+        if (connectionClosed()) {
             connection = acceptor.accept();
         }
     }
+
+    boolean connectionClosed() {
+        return !connection.isConnected() || connection.isClosed();
+    }
+
     boolean isStartCommand(String s) {
         return s.equals(START);
     }

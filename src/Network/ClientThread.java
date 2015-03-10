@@ -8,9 +8,8 @@ import java.util.concurrent.ArrayBlockingQueue;
 
 
 public class ClientThread extends Thread {
-    String data, destinationIP;
+    String destinationIP;
     int port;
-    Message type;
     Socket sender;
     BufferedWriter writer;
     public ArrayBlockingQueue toSend;
