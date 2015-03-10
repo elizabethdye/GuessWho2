@@ -3,12 +3,15 @@ package Game;
 public class Game {//handles basic game rules
 	private Player p1, p2;
 	private boolean p1Turn, gameOver;
+	private Card[][] cardGrid;
 	
-	public Game(Deck deck) {	
+	public Game(Deck deck, int size) {	
 		p1=new Player(deck);
 		p2=new Player(deck);
 		p1Turn=true;
 		gameOver=false;
+		int width=(int) Math.sqrt(size);
+		cardGrid=new Card[width][width];
 	}
 	
 	private void turn() {

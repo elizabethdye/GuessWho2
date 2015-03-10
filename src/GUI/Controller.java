@@ -89,14 +89,20 @@ public class Controller {
         conversation.appendText("Your IP: " + manager.getLocalIP() + '\n');
         manager.setDisplay(conversation);
     }
-    
+    @FXML
+    void yes() {
+    	inputText.appendText("Yes");
+    }
+    @FXML
+    void no() {
+    	inputText.appendText("No");
+    }
     private void startGame() {
     	Deck deck=new Deck(numCards, cardSet);
-    	game=new Game(deck);
+    	game=new Game(deck,numCards);
     }
     private void chooseNumCards() {
     	numCards=25; //temp
-    	//TODO not sure best way to do this. perhaps small window with choice/combobox upon starting game that requests num
     }
     private void chooseCardSet() {//choose cards first
     	CardSets set=CardSets.EMOJIS;//temp
