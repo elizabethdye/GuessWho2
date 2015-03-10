@@ -41,6 +41,7 @@ public class Controller {
     private Game game;
     private int numCards;
     private CardSet cardSet;
+    
 
     NetworkManager manager = NetworkManager.getInstance();
 
@@ -51,6 +52,10 @@ public class Controller {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+    }
+    @FXML
+    void isCorrectGuess(){
+    	//TODO: if myGuess.equals() other person's card: return yes ~or~ if mycard.equals() other person's guess
     }
     @FXML
     void sendTestPackets() {
