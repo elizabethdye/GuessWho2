@@ -1,5 +1,7 @@
 package GUI;
 
+import java.awt.image.BufferedImage;
+
 import Game.Card;
 import Game.CardSet;
 import Game.CardSets;
@@ -127,11 +129,11 @@ public class Controller {
     	return game.isEditable();
     }
     
-    private Card findCardSelected() {
+    private Node findNodeSelected() {
     	ObservableList<Node> cards = imageGrid.getChildren();
     	for(Node card: cards) {
     		if(card.isFocused()) {
-    			return (Card) card;
+    			return card;
     		}
     	}
     	return null;
@@ -139,14 +141,14 @@ public class Controller {
     
     @FXML
     private void guess() {
-    	Card guessed = findCardSelected();
+    	Node guessed = findNodeSelected();
     	if(guessed.equals(null)) {
     		return;
     	}
     	if(game.p1Turn()) {
-    		game.p1Guess(guessed);
+    		game.p1Guess((Card)guessed);
     	} else {
-    		game.p2Guess(guessed);
+    		game.p2Guess((Card)guessed);
     	}
     }
 
@@ -171,6 +173,17 @@ public class Controller {
                 e.printStackTrace();
             }
         }
+    }
+    
+    @FXML
+    public void favorite() {
+    	//TODO
+    	
+    }
+    
+    @FXML
+    public void crossOut() {
+    	//TODO
     }
 
 }
