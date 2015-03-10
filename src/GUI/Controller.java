@@ -1,16 +1,12 @@
 package GUI;
 
-import java.awt.image.BufferedImage;
-
-import Game.Card;
-import Game.CardSet;
-import Game.CardSets;
-import Game.Deck;
-import Game.Game;
-import Game.Player;
+import Game.*;
 import Network.Message;
 import Network.NetworkCommunication;
 import Network.NetworkManager;
+import javafx.application.Platform;
+import javafx.collections.ObservableList;
+import javafx.embed.swing.SwingFXUtils;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
@@ -21,6 +17,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 
+import java.awt.image.BufferedImage;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -57,16 +54,7 @@ public class Controller {
 	private final int ipNum=8888;
     
 	NetworkManager manager = NetworkManager.getInstance();
-    
-	@FXML
-    void initialize(){
-        String ip = manager.getLocalIP();
-        conversation.appendText("Your IP: " + manager.getLocalIP() + '\n');
-        manager.setDisplay(conversation);
-        updateUI runner = new updateUI(conversation);
-        Platform.runLater(runner);
-        startGame();
-    }
+
     void presentData(){
         //called to display the most recently received event.
         try {
@@ -118,7 +106,7 @@ public class Controller {
             @Override
             public void run() {
                 if (manager.numItems() > 0){
-                    Platform.runLater(()->{
+                    Platform.runLater(() -> {
                         try {
                             NetworkCommunication comm = manager.getLatest();
                             handleCommand(comm);
@@ -130,13 +118,18 @@ public class Controller {
                 }
             }
         }, 0, 200);
+
+        //startGame();
+        //setUpGrid();
     }
 
-    public void handleCommand(NetworkCommunication command){
-        if (command.type == Message.TEXT){
+    public void handleCommand(NetworkCommunication command) {
+        if (command.type == Message.TEXT) {
             conversation.appendText(command.data);
         }
         //todo: Finish the rest of the commands.
+    }
+
     private void yes() {
     	inputText.appendText("Yes");
     	game.turn();
@@ -183,12 +176,15 @@ public class Controller {
     private void chooseNumCards() {
     	numCards=25; //temp
     }
-    private void chooseCardSet() {
+    private void chooseCardSet() {//choose cards first
+    	CardSets set=CardSets.EMOJIS;//temp
+    	cardSet=set.toCardSet();
     	//TODO see chooseNumCards
     }
     private boolean isEditable() {
     	return game.isEditable();
     }
+    
     private Node findNodeSelected() {
     	ObservableList<Node> cards = imageGrid.getChildren();
     	for(Node card: cards) {

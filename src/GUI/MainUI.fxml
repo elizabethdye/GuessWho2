@@ -1,14 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import javafx.scene.image.*?>
-<?import javafx.scene.text.*?>
 <?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.Font?>
-
 <SplitPane dividerPositions="0.4909310761789601" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="622.0" prefWidth="829.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="GUI.Controller">
   <items>
       <SplitPane dividerPositions="0.7446102819237148" orientation="VERTICAL" prefHeight="200.0" prefWidth="160.0">
@@ -45,12 +41,12 @@
                                     <Insets bottom="5.0" left="5.0" right="5.0" />
                                  </HBox.margin>
                               </CheckBox>
-                              <Button fx:id="yes" mnemonicParsing="false" onAction="#yes" prefHeight="26.0" prefWidth="58.0" text="Yes" translateX="-20.0">
+                              <Button fx:id="yes" mnemonicParsing="false" prefHeight="26.0" prefWidth="58.0" text="Yes" translateX="-20.0">
                                  <HBox.margin>
                                     <Insets bottom="5.0" left="5.0" right="5.0" />
                                  </HBox.margin>
                               </Button>
-                              <Button fx:id="no" mnemonicParsing="false" onAction="#no" prefHeight="26.0" prefWidth="55.0" text="No" translateX="-20.0">
+                              <Button fx:id="no" mnemonicParsing="false" prefHeight="26.0" prefWidth="55.0" text="No" translateX="-20.0">
                                  <HBox.margin>
                                     <Insets bottom="5.0" left="5.0" right="5.0" />
                                  </HBox.margin>
@@ -64,7 +60,25 @@
         </items>
       </SplitPane>
       <BorderPane prefHeight="200.0" prefWidth="200.0">
-         <center>
+         <bottom>
+            <HBox alignment="CENTER" prefHeight="32.0" prefWidth="417.0" BorderPane.alignment="CENTER">
+               <children>
+                  <Button fx:id="heart" mnemonicParsing="false" text="&lt;3">
+                     <HBox.margin>
+                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                     </HBox.margin></Button>
+                  <Button fx:id="guess" alignment="CENTER" mnemonicParsing="false" text="Guess" textAlignment="CENTER">
+                     <HBox.margin>
+                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                     </HBox.margin></Button>
+                  <Button fx:id="crossOut" mnemonicParsing="false" text="X">
+                     <HBox.margin>
+                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                     </HBox.margin></Button>
+               </children>
+            </HBox>
+         </bottom>
+         <top>
             <GridPane fx:id="imageGrid" BorderPane.alignment="CENTER">
               <columnConstraints>
                 <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -76,25 +90,7 @@
                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
               </rowConstraints>
             </GridPane>
-         </center>
-         <bottom>
-            <HBox alignment="CENTER" prefHeight="32.0" prefWidth="417.0" BorderPane.alignment="CENTER">
-               <children>
-                  <Button fx:id="heart" mnemonicParsing="false" onAction="#favorite" text="&lt;3">
-                     <HBox.margin>
-                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                     </HBox.margin></Button>
-                  <Button fx:id="guess" alignment="CENTER" mnemonicParsing="false" onAction="#guess" text="Guess" textAlignment="CENTER">
-                     <HBox.margin>
-                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                     </HBox.margin></Button>
-                  <Button fx:id="crossOut" mnemonicParsing="false" onAction="#crossOut" text="X">
-                     <HBox.margin>
-                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                     </HBox.margin></Button>
-               </children>
-            </HBox>
-         </bottom>
+         </top>
       </BorderPane>
   </items>
 </SplitPane>
