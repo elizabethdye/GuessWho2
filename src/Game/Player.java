@@ -13,6 +13,9 @@ public class Player {
 		card=getRandomCard();
 		penalized=false;
 	}
+	public Card getCard() {
+		return card;
+	}
 	boolean isCorrectCard(String card) {
 		return this.card.getName().equals(card);
 	}
