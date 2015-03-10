@@ -7,17 +7,20 @@ import Game.CardSet;
 import Game.CardSets;
 import Game.Deck;
 import Game.Game;
+import Game.Player;
 import Network.Message;
 import Network.NetworkCommunication;
 import Network.NetworkManager;
 import javafx.collections.ObservableList;
 import javafx.application.Platform;
+import javafx.embed.swing.SwingFXUtils;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 
@@ -50,6 +53,7 @@ public class Controller {
     private CardSet cardSet;
     private Deck deck;
 	private Card[][] cardGrid;
+	private Player player;
     
 	NetworkManager manager = NetworkManager.getInstance();
     
@@ -214,6 +218,12 @@ public class Controller {
     	Node selected = findNodeSelected();
     	int row = findRowSelected(selected);
     	int col = findColumnSelected(selected);
+    }
+    
+    private void insertProfilePic() {
+    	BufferedImage playerImage = player.getCard().getImage();
+    	Image image = SwingFXUtils.toFXImage(playerImage, null);
+    	profile.setImage(image);
     }
 
 }
