@@ -13,8 +13,8 @@ public class Player {
 		card=getRandomCard();
 		penalized=false;
 	}
-	boolean isCorrectCard(Card card) {
-		return this.card==card;
+	boolean isCorrectCard(String card) {
+		return this.card.getName().equals(card);
 	}
 	boolean isPenalized() {
 		return penalized;

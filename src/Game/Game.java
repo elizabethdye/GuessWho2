@@ -29,7 +29,7 @@ public class Game {//handles basic game rules
 		turn();
 	}
 	void p1Guess(Card card) {
-		if (p2.isCorrectCard(card)) {
+		if (p2.isCorrectCard(card.getName())) {
 			gameOver();	
 		}
 		else {
@@ -37,7 +37,7 @@ public class Game {//handles basic game rules
 		}
 	}
 	void p2Guess(Card card) {
-		if (p1.isCorrectCard(card)) {
+		if (p1.isCorrectCard(card.getName())) {
 			gameOver();	
 		}
 		else {

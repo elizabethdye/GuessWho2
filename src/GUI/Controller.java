@@ -84,8 +84,8 @@ public class Controller {
     	//TODO not sure best way to do this. perhaps small window with choice/combobox upon starting game that requests num
     }
     private void chooseCardSet() {//choose cards first
-    	CardSets set=CardSets.SUPERHEROES;
-    	cardSet=set.toCardSet(); //temp
+    	CardSets set=CardSets.EMOJIS;//temp
+    	cardSet=set.toCardSet();
     	//TODO see chooseNumCards
     }
     private boolean isEditable() {
