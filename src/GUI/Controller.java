@@ -141,14 +141,24 @@ public class Controller {
     	return null;
     }
     
+    private int findRowSelected(Node node) {
+    	return imageGrid.getRowIndex(node);
+    }
+    
+    private int findColumnSelected(Node node) {
+    	return imageGrid.getColumnIndex(node);
+    }
+    
     @FXML
     private void guess() {
     	Node guessed = findNodeSelected();
+    	int row = findRowSelected(guessed);
+    	int col = findColumnSelected(guessed);
     	if(guessed.equals(null)) {
     		return;
     	}
     	if(game.p1Turn()) {
-    		game.p1Guess((Card)guessed);
+    		game.p1Guess(cardGrid[row][col]);
     	} else {
     		game.p2Guess((Card)guessed);
     	}
@@ -192,12 +202,18 @@ public class Controller {
     @FXML
     public void favorite() {
     	//TODO
-    	
+    	//Draw heart over selected node
+    	Node selected = findNodeSelected();
+    	int row = findRowSelected(selected);
+    	int col = findColumnSelected(selected);
     }
     
     @FXML
     public void crossOut() {
-    	//TODO
+    	//TODO Draw "X" over selected node
+    	Node selected = findNodeSelected();
+    	int row = findRowSelected(selected);
+    	int col = findColumnSelected(selected);
     }
 
 }
