@@ -12,7 +12,7 @@ public class Deck {
 	public int getSize() {
 		return cards.length;
 	}
-	Card getCard(int index) {
+	public Card getCard(int index) {
 		return cards[index];
 	}
 	private void setUpCards() {

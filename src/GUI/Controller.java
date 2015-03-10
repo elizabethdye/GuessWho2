@@ -1,18 +1,23 @@
 package GUI;
 
+import java.awt.image.BufferedImage;
+
+import Game.Card;
 import Game.CardSet;
 import Game.CardSets;
 import Game.Deck;
 import Game.Game;
+import Game.Player;
 import Network.Message;
 import Network.NetworkCommunication;
 import Network.NetworkManager;
-import javafx.application.Platform;
 import javafx.fxml.FXML;
+import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 
@@ -46,10 +51,23 @@ public class Controller {
     private Game game;
     private int numCards;
     private CardSet cardSet;
+    private Deck deck;
+	private Card[][] cardGrid;
+	private Player player;
+	private final int ipNum=8888;
     
-
-    NetworkManager manager = NetworkManager.getInstance();
-
+	NetworkManager manager = NetworkManager.getInstance();
+    
+	@FXML
+    void initialize(){
+        String ip = manager.getLocalIP();
+        conversation.appendText("Your IP: " + manager.getLocalIP() + '\n');
+        manager.setDisplay(conversation);
+        updateUI runner = new updateUI(conversation);
+        Platform.runLater(runner);
+        startGame();
+        setUpGrid();
+    }
     void presentData(){
         //called to display the most recently received event.
         try {
@@ -57,10 +75,6 @@ public class Controller {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-    }
-    @FXML
-    void isCorrectGuess(){
-    	//TODO: if myGuess.equals() other person's card: return yes ~or~ if mycard.equals() other person's guess
     }
     @FXML
     void sendTestPackets() {
@@ -81,12 +95,19 @@ public class Controller {
 
     @FXML
     void sendMessage(){
-        String message = inputText.getText();
+        String input = inputText.getText();
+        String[] items = input.split("\n");
+        String ip = items[0];
+        String message = "";
+        for (int i = 1; i < items.length; ++i){
+            message += items[i] + "\n";
+        }
         NetworkCommunication comm = new NetworkCommunication(Message.TEXT, message);
 
+        manager.openConnection(ip, ipNum);
+        
         manager.sendMessage(comm);
     }
-
     @FXML
     void initialize(){
         String ip = manager.getLocalIP();
@@ -117,15 +138,50 @@ public class Controller {
             conversation.appendText(command.data);
         }
         //todo: Finish the rest of the commands.
+    private void yes() {
+    	inputText.appendText("Yes");
+    	game.turn();
     }
-    
+    @FXML
+    private void no() {
+    	inputText.appendText("No");
+    	game.turn();
+    }
+    @FXML
+    public void favorite() {
+    	//TODO
+    	//Draw heart over selected node
+    	Node selected = findNodeSelected();
+    	int row = findRowSelected(selected);
+    	int col = findColumnSelected(selected);
+    }
+    @FXML
+    public void crossOut() {
+    	//TODO Draw "X" over selected node
+    	Node selected = findNodeSelected();
+    	int row = findRowSelected(selected);
+    	int col = findColumnSelected(selected);
+    }
+    @FXML
+    private void guess() {
+    	Node guessed = findNodeSelected();
+    	int row = findRowSelected(guessed);
+    	int col = findColumnSelected(guessed);
+    	if(guessed.equals(null)) {
+    		return;
+    	}
+    	if(game.p1Turn()) {
+    		game.p1Guess(cardGrid[row][col]);
+    	} else {
+    		game.p2Guess((Card)guessed);
+    	}
+    }
     private void startGame() {
-    	Deck deck=new Deck(numCards, cardSet);
-    	game=new Game(deck);
+    	deck=new Deck(numCards, cardSet);
+    	game=new Game(deck,numCards);
     }
     private void chooseNumCards() {
     	numCards=25; //temp
-    	//TODO not sure best way to do this. perhaps small window with choice/combobox upon starting game that requests num
     }
     private void chooseCardSet() {//choose cards first
     	CardSets set=CardSets.EMOJIS;//temp
@@ -135,4 +191,62 @@ public class Controller {
     private boolean isEditable() {
     	return game.isEditable();
     }
+    
+    private Node findNodeSelected() {
+    	ObservableList<Node> cards = imageGrid.getChildren();
+    	for(Node card: cards) {
+    		if(card.isFocused()) {
+    			return card;
+    		}
+    	}
+    	return null;
+    }
+    
+    private int findRowSelected(Node node) {
+    	return imageGrid.getRowIndex(node);
+    }
+    
+    private int findColumnSelected(Node node) {
+    	return imageGrid.getColumnIndex(node);
+    }
+    private void setUpGrid() {
+    	Card tempCard;
+		int width=(int) Math.sqrt(numCards);
+		cardGrid=new Card[width][width];
+		for (int idx=0; idx<width; idx++) {
+			for (int idy=0; idy<width; idy++) {
+				tempCard=deck.getCard(idx*width+idy);
+				cardGrid[idx][idy]=tempCard;
+				imageGrid.add(tempCard.getImage(), idx, idy);
+			}
+		}
+    }
+
+    public class updateUI implements Runnable{
+
+        TextArea conv;
+
+        public updateUI(TextArea conv){
+            this.conv = conv;
+        }
+        public void run(){
+            try {
+                while(true){
+                    NetworkCommunication comm = manager.getLatest();
+                    if (comm.type == Message.TEXT){
+                        this.conv.appendText(comm.data + "\n");
+                    }
+                    //todo: fill out the rest of these
+                }
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+    private void insertProfilePic() {
+    	BufferedImage playerImage = player.getCard().getImage();
+    	Image image = SwingFXUtils.toFXImage(playerImage, null);
+    	profile.setImage(image);
+    }
+
 }

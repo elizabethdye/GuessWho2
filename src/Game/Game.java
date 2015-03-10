@@ -3,15 +3,16 @@ package Game;
 public class Game {//handles basic game rules
 	private Player p1, p2;
 	private boolean p1Turn, gameOver;
+
 	
-	public Game(Deck deck) {	
+	public Game(Deck deck, int size) {	
 		p1=new Player(deck);
 		p2=new Player(deck);
 		p1Turn=true;
 		gameOver=false;
 	}
 	
-	private void turn() {
+	public void turn() {
 		if (p1Turn) {
 			//TODO display yes or no p1 gui
 		}
@@ -20,28 +21,26 @@ public class Game {//handles basic game rules
 		}
 		changeTurn();
 	}
-	void yes() {
-		//TODO print Yes
-		turn();
-	}
-	void no() {
-		//TODO print No
-		turn();
-	}
-	void p1Guess(Card card) {
-		if (p2.isCorrectCard(card.getName())) {
-			gameOver();	
-		}
-		else {
-			penalize(p1);
+	public void p1Guess(Card card) {
+		if (p1Turn) {
+			if (p2.isCorrectCard(card.getName())) {
+				gameOver();	
+			}
+			else {
+				penalize(p1);
+				p1Turn=false;
+			}
 		}
 	}
-	void p2Guess(Card card) {
-		if (p1.isCorrectCard(card.getName())) {
-			gameOver();	
-		}
-		else {
-			penalize(p2);
+	public void p2Guess(Card card) {
+		if (!p1Turn) {
+			if (p1.isCorrectCard(card.getName())) {
+				gameOver();	
+			}
+			else {
+				penalize(p2);
+				p1Turn=true;
+			}
 		}
 	}
 	void gameOver() {
@@ -71,5 +70,8 @@ public class Game {//handles basic game rules
 	}
 	public boolean isEditable() {
 		return !gameOver;
+	}
+	public boolean p1Turn() {
+		return p1Turn;
 	}
 }

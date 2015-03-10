@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.text.*?>
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.layout.BorderPane?>
+
+<BorderPane prefHeight="265.0" prefWidth="432.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="GUI.OpeningController">
+   <center>
+      <VBox alignment="CENTER" prefHeight="292.0" prefWidth="432.0" BorderPane.alignment="CENTER">
+         <children>
+            <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
+               <children>
+                  <Label text="Welcome to Guess Who 2.0!">
+                     <font>
+                        <Font size="24.0" />
+                     </font>
+                  </Label>
+               </children>
+            </HBox>
+            <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
+               <children>
+                  <Label text="IP Address: " />
+                  <TextField fx:id="ipAddress" alignment="CENTER" onAction="#setIPAddress" />
+               </children>
+            </HBox>
+            <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
+               <children>
+                  <Label text="Card Set: " />
+                  <ChoiceBox fx:id="cardSet" onDragDetected="#cardSetChoice" prefWidth="150.0" />
+               </children>
+            </HBox>
+            <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
+               <children>
+                  <Label text="# of Cards: " />
+                  <ChoiceBox fx:id="numCards" onDragDetected="#numCardChoice" prefWidth="150.0">
+                     <contextMenu>
+                        <ContextMenu>
+                          <items>
+                            <MenuItem mnemonicParsing="false" text="9" />
+                              <MenuItem mnemonicParsing="false" text="16" />
+                              <MenuItem mnemonicParsing="false" text="25" />
+                          </items>
+                        </ContextMenu>
+                     </contextMenu>
+                  </ChoiceBox>
+               </children>
+            </HBox>
+            <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
+               <children>
+                  <Button fx:id="startGame" mnemonicParsing="false" onAction="#startGame" text="Start Game" />
+               </children>
+            </HBox>
+         </children>
+      </VBox>
+   </center>
+</BorderPane>
