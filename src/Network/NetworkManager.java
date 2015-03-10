@@ -68,12 +68,7 @@ public class NetworkManager {
     }
 
     public void addComm(NetworkCommunication comm){
-        if (comm.type == Message.TEXT && display != null){
-            display.appendText(comm.data + "\n");
-        }
-        else {
-            received.add(comm);
-        }
+        received.add(comm);
     }
 
     public String getLocalIP() {

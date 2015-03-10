@@ -9,6 +9,7 @@ import Network.Message;
 import Network.NetworkCommunication;
 import Network.NetworkManager;
 import javafx.collections.ObservableList;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
@@ -80,9 +81,17 @@ public class Controller {
 
     @FXML
     void sendMessage(){
-        String message = inputText.getText();
+        String input = inputText.getText();
+        String[] items = input.split("\n");
+        String ip = items[0];
+        String message = "";
+        for (int i = 1; i < items.length; ++i){
+            message += items[i] + "\n";
+        }
         NetworkCommunication comm = new NetworkCommunication(Message.TEXT, message);
 
+        manager.openConnection(ip, 8888);
+        
         manager.sendMessage(comm);
     }
 
@@ -91,6 +100,8 @@ public class Controller {
         String ip = manager.getLocalIP();
         conversation.appendText("Your IP: " + manager.getLocalIP() + '\n');
         manager.setDisplay(conversation);
+        updateUI runner = new updateUI(conversation);
+        Platform.runLater(runner);
     }
     
     private void startGame() {
@@ -132,4 +143,28 @@ public class Controller {
     		game.p2Guess(guessed);
     	}
     }
+
+
+    public class updateUI implements Runnable{
+
+        TextArea conv;
+
+        public updateUI(TextArea conv){
+            this.conv = conv;
+        }
+        public void run(){
+            try {
+                while(true){
+                    NetworkCommunication comm = manager.getLatest();
+                    if (comm.type == Message.TEXT){
+                        this.conv.appendText(comm.data + "\n");
+                    }
+                    //todo: fill out the rest of these
+                }
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
 }
