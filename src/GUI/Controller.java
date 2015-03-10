@@ -53,11 +53,8 @@ public class Controller {
     private CardSet cardSet;
     private Deck deck;
 	private Card[][] cardGrid;
-<<<<<<< HEAD
 	private Player player;
-=======
 	private final int ipNum=8888;
->>>>>>> origin/master
     
 	NetworkManager manager = NetworkManager.getInstance();
     
