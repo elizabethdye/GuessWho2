@@ -48,6 +48,7 @@ public class Controller {
     private Game game;
     private int numCards;
     private CardSet cardSet;
+	private Card[][] cardGrid;
     
 
     NetworkManager manager = NetworkManager.getInstance();
@@ -104,6 +105,7 @@ public class Controller {
         manager.setDisplay(conversation);
         updateUI runner = new updateUI(conversation);
         Platform.runLater(runner);
+        setUpGrid();
     }
     @FXML
     void yes() {
@@ -152,6 +154,10 @@ public class Controller {
     	}
     }
 
+    private void setUpGrid() {
+		int width=(int) Math.sqrt(numCards);
+		cardGrid=new Card[width][width];
+    }
 
     public class updateUI implements Runnable{
 
