@@ -55,7 +55,6 @@ public class Controller {
     
     private Game game;
     
-    private int numCards;
     private CardSet cardSet;
     private Deck deck;
 	private Card[][] cardGrid;
@@ -150,11 +149,13 @@ public class Controller {
     @FXML
 	void addCardChoices(){
 		card_Set.getItems().addAll("Emojis","Superheros");
+		card_Set.setValue("Emojis");
 	}
 	
 	@FXML
 	void addNumCardChoices(){
 		num_Cards.getItems().addAll("9","16","25");
+		num_Cards.setValue("16");
 	}
 	@FXML
 	void setIPAddress(){
@@ -162,7 +163,8 @@ public class Controller {
 	}
 	
 	private void cardSetChoice(){
-		manager.cardSetName = card_Set.getValue().toString();
+		manager.cardSetName = card_Set.getValue().toString().toUpperCase();
+		cardSet = CardSets.valueOf(manager.cardSetName).toCardSet();
 	}
 	private void numCardChoice(){
 		manager.numCards = Integer.valueOf(num_Cards.getValue().toString());
@@ -227,8 +229,8 @@ public class Controller {
     }
     
     private void startGame() {
-    	deck=new Deck(numCards, cardSet);
-    	game=new Game(deck,numCards);
+    	deck=new Deck(manager.numCards, cardSet);
+    	game=new Game(deck,manager.numCards);
         setUpGrid();
     }
     private boolean isEditable() {
@@ -256,15 +258,20 @@ public class Controller {
     	Card tempCard;
     	BufferedImage bufImage;
     	Image image;
-		int width=(int) Math.sqrt(numCards);
+		int width=(int) Math.sqrt(manager.numCards);
 		cardGrid=new Card[width][width];
+		//imageGrid = new GridPane();
+		imageGrid.setGridLinesVisible(true);
 		for (int idx=0; idx<width; idx++) {
 			for (int idy=0; idy<width; idy++) {
 				tempCard=deck.getCard(idx*width+idy);
 				cardGrid[idx][idy]=tempCard;
 				bufImage=tempCard.getImage();
 				image=convertBufferedToImage(bufImage);
-				imageGrid.add(new ImageView(image), idx, idy);
+				ImageView imgView = new ImageView(image);
+				imgView.setFitWidth(imageGrid.getWidth() / width);
+				imgView.setFitHeight(imageGrid.getWidth() / width);
+				imageGrid.add(imgView, idx, idy);
 			}
 		}
     }

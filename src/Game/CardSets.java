@@ -10,7 +10,7 @@ public enum CardSets {
 			case EMOJIS:
 				return new CardSet("Emojis");
 			default:
-				return new CardSet("null");//null?
+				return new CardSet("Emojis");
 		}
 	}
 	public void addEnum() {

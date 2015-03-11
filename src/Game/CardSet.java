@@ -9,7 +9,7 @@ import javax.imageio.ImageIO;
 
 
 public class CardSet {
-	private ArrayList<Card> cards;
+	private ArrayList<Card> cards=new ArrayList<Card>();
 	private String picFolder="Pictures";
 	private String folderName;
 	
@@ -35,7 +35,7 @@ public class CardSet {
 			addFile(file);
 		}
 	}
-	private void addFile(File file) throws IOException {
+	private void addFile(File file) throws IOException {	
 		cards.add(new Card(file.getName(), readImage(file)));
 	}
 	private File[] listFiles() {
