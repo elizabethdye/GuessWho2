@@ -14,6 +14,9 @@ public class NetworkManager {
     Thread serverThread;
     ClientThread clientThread;
     TextArea display;
+	public String cardSetName;
+	public int numCards;
+	public String IPAddress;
 
     public static NetworkManager getInstance() {
         return ourInstance;

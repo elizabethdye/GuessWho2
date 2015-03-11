@@ -9,10 +9,7 @@ import javafx.collections.ObservableList;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
-import javafx.scene.control.Button;
-import javafx.scene.control.CheckBox;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextArea;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
@@ -22,6 +19,17 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 public class Controller {
+	@FXML
+	TextField ipAddress;
+	
+	@FXML
+	ChoiceBox card_Set;
+	
+	@FXML
+	ChoiceBox num_Cards;
+	
+	@FXML
+	Button startGame;
     @FXML
     GridPane imageGrid;
     @FXML
@@ -46,12 +54,14 @@ public class Controller {
     Button no;
     
     private Game game;
+    
     private int numCards;
     private CardSet cardSet;
     private Deck deck;
 	private Card[][] cardGrid;
 	private Player player;
 	private final int ipNum=8888;
+    public boolean gameStarted = false;
     
 	NetworkManager manager = NetworkManager.getInstance();
 
@@ -91,16 +101,17 @@ public class Controller {
         }
         NetworkCommunication comm = new NetworkCommunication(Message.TEXT, message);
 
-        manager.openConnection(ip, ipNum);
-        
-        manager.sendMessage(comm);
+        if (gameStarted){
+            manager.sendMessage(comm);
+        }
     }
     @FXML
     void initialize(){
         String ip = manager.getLocalIP();
         conversation.appendText("Your IP: " + manager.getLocalIP() + '\n');
         manager.setDisplay(conversation);
-
+        addCardChoices();
+        addNumCardChoices();
         Timer t = new Timer();
         t.schedule(new TimerTask() {
             @Override
@@ -117,7 +128,7 @@ public class Controller {
                     });
                 }
             }
-        }, 0, 200);
+        }, 1000, 800);
 
         //startGame();
         //setUpGrid();
@@ -133,6 +144,41 @@ public class Controller {
     private boolean shouldPrint(NetworkCommunication comm){
         return comm.type == Message.TEXT || comm.type == Message.RESPONSE || comm.type == Message.QUESTION;
     }
+
+    @FXML
+    public void initializeGame(){
+        manager.openConnection(ipAddress.getText(), 8888);
+        gameStarted = true;
+    }
+    @FXML
+	void addCardChoices(){
+		card_Set.getItems().addAll("Emojis","Superheros");
+	}
+	
+	@FXML
+	void addNumCardChoices(){
+		num_Cards.getItems().addAll("9","16","25");
+	}
+	@FXML
+	void setIPAddress(){
+		manager.IPAddress = ipAddress.getText();
+	}
+	
+	@FXML
+	void cardSetChoice(){
+		manager.cardSetName = card_Set.getValue().toString();
+	}
+	
+	@FXML
+	void numCardChoice(){
+		manager.numCards = Integer.valueOf(num_Cards.getValue().toString());
+	}
+	@FXML
+	void startNewGame(){
+		setIPAddress();
+		cardSetChoice();
+		numCardChoice();
+	}
     @FXML
     private void yes() {
     	inputText.appendText("Yes");
@@ -238,27 +284,4 @@ public class Controller {
     private Image convertBufferedToImage(BufferedImage image) {
     	return SwingFXUtils.toFXImage(image, null);
     }
-    
-    
-    public class updateUI implements Runnable{
-
-        TextArea conv;
-
-        public updateUI(TextArea conv){
-            this.conv = conv;
-        }
-        public void run(){
-            try {
-                while(true){
-                    NetworkCommunication comm = manager.getLatest();
-                    if (comm.type == Message.TEXT){
-                        this.conv.appendText(comm.data + "\n");
-                    }
-                    //TODO: fill out the rest of these
-                }
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
-    } 	
 }
