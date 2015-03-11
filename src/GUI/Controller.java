@@ -91,13 +91,7 @@ public class Controller {
 
     @FXML
     void sendMessage(){
-        String input = inputText.getText();
-        String[] items = input.split("\n");
-        String ip = items[0];
-        String message = "";
-        for (int i = 1; i < items.length; ++i){
-            message += items[i] + "\n";
-        }
+        String message = inputText.getText();
         NetworkCommunication comm = new NetworkCommunication(Message.TEXT, message);
 
         if (gameStarted){

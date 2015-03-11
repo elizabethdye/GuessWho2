@@ -46,15 +46,13 @@ public class NetworkManager {
     }
 
     public void openConnection(String ip, int port) {
-        if (!channelSetup()){
-            return;
-        }
-        clientThread = new ClientThread(ip, port);
-        clientThread.start();
+        this.IPAddress = ip;
     }
 
     public void sendMessage(NetworkCommunication comm){
+        clientThread = new ClientThread(this.IPAddress, 8888);
         clientThread.addMessage(comm);
+        clientThread.start();
     }
 
     public void endConnections() {

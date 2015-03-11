@@ -50,20 +50,6 @@ public class ServerThread extends Thread{
             } catch (IOException e) {
                 e.printStackTrace();
                 manager.reportError(e.toString());
-            } finally {
-                //close everything
-                //acceptor.close();
-
-                try {
-                    if (!acceptor.isClosed()) {
-                        acceptor.close();
-                    }
-                    if (!connection.isClosed()) {
-                        connection.close();
-                    }
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
             }
         }
     }
