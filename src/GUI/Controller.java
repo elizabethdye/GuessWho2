@@ -23,10 +23,10 @@ public class Controller {
 	TextField ipAddress;
 	
 	@FXML
-	ChoiceBox card_Set;
+	ChoiceBox<String> card_Set;
 	
 	@FXML
-	ChoiceBox num_Cards;
+	ChoiceBox<String> num_Cards;
 	
 	@FXML
 	Button startGame;
@@ -129,9 +129,6 @@ public class Controller {
                 }
             }
         }, 1000, 800);
-
-        //startGame();
-        //setUpGrid();
     }
 
     public void handleCommand(NetworkCommunication communication) {
@@ -147,7 +144,7 @@ public class Controller {
 
     @FXML
     public void initializeGame(){
-        manager.openConnection(ipAddress.getText(), 8888);
+        manager.openConnection(ipAddress.getText(), ipNum);
         gameStarted = true;
     }
     @FXML
@@ -164,13 +161,10 @@ public class Controller {
 		manager.IPAddress = ipAddress.getText();
 	}
 	
-	@FXML
-	void cardSetChoice(){
+	private void cardSetChoice(){
 		manager.cardSetName = card_Set.getValue().toString();
 	}
-	
-	@FXML
-	void numCardChoice(){
+	private void numCardChoice(){
 		manager.numCards = Integer.valueOf(num_Cards.getValue().toString());
 	}
 	@FXML
@@ -178,6 +172,7 @@ public class Controller {
 		setIPAddress();
 		cardSetChoice();
 		numCardChoice();
+		startGame();
 	}
     @FXML
     private void yes() {
@@ -201,16 +196,20 @@ public class Controller {
     public void favorite() {
     	//TODO
     	//Draw heart over selected node
-    	Node selected = findNodeSelected();
-    	int row = findRowSelected(selected);
-    	int col = findColumnSelected(selected);
+    	if (isEditable()) {
+    		Node selected = findNodeSelected();
+    		int row = findRowSelected(selected);
+    		int col = findColumnSelected(selected);
+    	}
     }
     @FXML
     public void crossOut() {
     	//TODO Draw "X" over selected node
-    	Node selected = findNodeSelected();
-    	int row = findRowSelected(selected);
-    	int col = findColumnSelected(selected);
+    	if (isEditable()) {
+    		Node selected = findNodeSelected();
+    		int row = findRowSelected(selected);
+    		int col = findColumnSelected(selected);
+    	}
     }
     @FXML
     private void guess() {
@@ -226,18 +225,11 @@ public class Controller {
     		game.p2Guess((Card)guessed);
     	}
     }
+    
     private void startGame() {
     	deck=new Deck(numCards, cardSet);
     	game=new Game(deck,numCards);
         setUpGrid();
-    }
-    private void chooseNumCards() {
-    	numCards=25; //temp
-    }
-    private void chooseCardSet() {//choose cards first
-    	CardSets set=CardSets.EMOJIS;//temp
-    	cardSet=set.toCardSet();
-    	//TODO see chooseNumCards
     }
     private boolean isEditable() {
     	return game.isEditable();
