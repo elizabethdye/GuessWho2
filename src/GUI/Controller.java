@@ -269,6 +269,8 @@ public class Controller {
 				imgView.setFitWidth(imageGrid.getWidth() / width);
 				imgView.setFitHeight(imageGrid.getWidth() / width);
 				imageGrid.add(imgView, idx, idy);
+				//set the image to a row, column within the grid, so a specific grid spot
+				//I believe there is a method to set an image within a grid like setColumn, setRow
 			}
 		}
     }
