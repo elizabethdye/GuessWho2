@@ -102,6 +102,11 @@ public class Controller {
 
         if (gameStarted){
             manager.sendMessage(comm);
+            conversation.appendText("ME: " + message);
+            inputText.setText("");
+        }
+        else {
+            conversation.appendText("The game isn't started!  Please start the game to send a message.");
         }
     }
     @FXML
@@ -132,7 +137,7 @@ public class Controller {
 
     public void handleCommand(NetworkCommunication communication) {
         if (shouldPrint(communication)) {
-            conversation.appendText(communication.data);
+            conversation.appendText("Other Player: " + communication.data);
         }
 
         //todo: Finish the rest of the commands.
@@ -141,11 +146,6 @@ public class Controller {
         return comm.type == Message.TEXT || comm.type == Message.RESPONSE || comm.type == Message.QUESTION;
     }
 
-    @FXML
-    public void initializeGame(){
-        manager.openConnection(ipAddress.getText(), ipNum);
-        gameStarted = true;
-    }
     @FXML
 	void addCardChoices(){
 		card_Set.getItems().addAll("Emojis","Superheros");
@@ -175,6 +175,9 @@ public class Controller {
 		cardSetChoice();
 		numCardChoice();
 		startGame();
+
+        manager.openConnection(ipAddress.getText(), ipNum);
+        gameStarted = true;
 	}
     @FXML
     private void yes() {
@@ -215,8 +218,8 @@ public class Controller {
     }
     @FXML
     private void guess() {
-    	Node guessed = findNodeSelected();
-    	int row = findRowSelected(guessed);
+        Node guessed = findNodeSelected();
+        int row = findRowSelected(guessed);
     	int col = findColumnSelected(guessed);
     	if(guessed.equals(null)) {
     		return;
