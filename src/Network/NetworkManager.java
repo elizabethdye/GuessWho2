@@ -17,6 +17,7 @@ public class NetworkManager {
 	public String cardSetName;
 	public int numCards;
 	public String IPAddress;
+	private int port=8888;
 
     public static NetworkManager getInstance() {
         return ourInstance;
@@ -35,7 +36,7 @@ public class NetworkManager {
     public void startServer() {
         ServerThread thread = null;
         try {
-            thread = new ServerThread(8888);
+            thread = new ServerThread(port);
             serverThread = new Thread(thread);
             serverThread.start();
 
@@ -50,7 +51,7 @@ public class NetworkManager {
     }
 
     public void sendMessage(NetworkCommunication comm){
-        clientThread = new ClientThread(this.IPAddress, 8888);
+        clientThread = new ClientThread(this.IPAddress, port);
         clientThread.addMessage(comm);
         clientThread.start();
     }
@@ -82,7 +83,6 @@ public class NetworkManager {
 
     public void test(String IP) {
         System.out.println("Starting Server");
-        int port = 8888;
 
         openConnection(IP, port);
 
