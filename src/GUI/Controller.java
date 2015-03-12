@@ -175,8 +175,9 @@ public class Controller {
         if (imageGrid.getChildren().size() > 0){
             imageGrid.getChildren().remove(0, imageGrid.getChildren().size());
         }
-        if (ipAddress.getText().length() < 0){
+        if (ipAddress.getText().length() <= 0){
             manager.reportError("You need to specify an IP to connect to!");
+            System.out.println("You need to specify an IP to connect to!");
             return;
         }
 		setIPAddress();
@@ -271,7 +272,6 @@ public class Controller {
 		for (int idx=0; idx<width; idx++) {
 			for (int idy=0; idy<width; idy++) {
 				addToGrids(idx,idy, width);
-				
 			}
 		}
     }
