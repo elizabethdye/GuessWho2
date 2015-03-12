@@ -6,7 +6,7 @@ public class Game {//handles basic game rules
 
 	
 	public Game(Deck deck, int size) {	
-		p1=new Player(deck);
+		p1=new Player(deck); 
 		p2=new Player(deck);
 		p1Turn=true;
 		gameOver=false;
