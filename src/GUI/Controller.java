@@ -244,6 +244,7 @@ public class Controller {
     	deck=new Deck(manager.numCards, cardSet);
     	game=new Game(deck,manager.numCards);
         setUpGrid();
+        insertProfilePic();
     }
     private boolean isEditable() {
     	return game.isEditable();
