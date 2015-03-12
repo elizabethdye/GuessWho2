@@ -105,6 +105,8 @@ public class Controller {
     @FXML
     void initialize(){
         String ip = manager.getLocalIP();
+        inputText.setWrapText(true);
+        conversation.setWrapText(true);
         conversation.appendText("Your IP: " + manager.getLocalIP() + '\n');
         manager.setDisplay(conversation);
         isQuestion.setVisible(false);
