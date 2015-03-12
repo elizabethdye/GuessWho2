@@ -173,7 +173,7 @@ public class Controller {
 	@FXML
 	void startNewGame(){
         if (imageGrid.getChildren().size() > 0){
-            imageGrid.getChildren().remove(0, imageGrid.getChildren().size() - 1);
+            imageGrid.getChildren().remove(0, imageGrid.getChildren().size());
         }
         if (ipAddress.getText().length() < 0){
             manager.reportError("You need to specify an IP to connect to!");
@@ -266,32 +266,27 @@ public class Controller {
     	return imageGrid.getColumnIndex(node);
     }
     private void setUpGrid() {
+    	int width=(int) Math.sqrt(manager.numCards);
+		cardGrid=new Card[width][width];
+		for (int idx=0; idx<width; idx++) {
+			for (int idy=0; idy<width; idy++) {
+				addToGrids(idx,idy, width);
+				
+			}
+		}
+    }
+    private void addToGrids(int x, int y, int width) {
     	Card tempCard;
     	BufferedImage bufImage;
     	Image image;
-		int width=(int) Math.sqrt(manager.numCards);
-		cardGrid=new Card[width][width];
-		//imageGrid = new GridPane();
-		imageGrid.setGridLinesVisible(true);
-		for (int idx=0; idx<width; idx++) {
-			for (int idy=0; idy<width; idy++) {
-				tempCard=deck.getCard(idx*width+idy);
-				cardGrid[idx][idy]=tempCard;
-				bufImage=tempCard.getImage();
-				image=convertBufferedToImage(bufImage);
-				ImageView imgView = new ImageView(image);
-				imgView.setFitWidth(imageGrid.getWidth() / width);
-				imgView.setFitHeight(imageGrid.getWidth() / width);
-				//imageGrid.setColumnIndex(imgView, idx);
-				//imageGrid.setRowIndex(imgView, idy);
-				//imageGrid.setRowSpan(imgView, 1);
-				//imageGrid.setColumnSpan(imgView, 1);
-				//imageGrid.addRow(idy, imgView);
-				imageGrid.addRow(idy, imgView);
-				//set the image to a row, column within the grid, so a specific grid spot
-				//I believe there is a method to set an image within a grid like setColumn, setRow
-			}
-		}
+    	tempCard=deck.getCard(x*width+y);
+		cardGrid[x][y]=tempCard;
+		bufImage=tempCard.getImage();
+		image=convertBufferedToImage(bufImage);
+		ImageView imgView = new ImageView(image);
+		imgView.setFitWidth(imageGrid.getWidth() / width);
+		imgView.setFitHeight(imageGrid.getHeight() / width);
+		imageGrid.add(imgView, x, y);
     }
     private void insertProfilePic() {
     	BufferedImage playerImage = player.getCard().getImage();
