@@ -96,7 +96,7 @@ public class Controller {
 
         if (gameStarted){
             manager.sendMessage(comm);
-            conversation.appendText("ME: " + message);
+            conversation.appendText("ME: " + message + "\n");
             inputText.setText("");
         }
         else {
@@ -133,6 +133,13 @@ public class Controller {
         if (shouldPrint(communication)) {
             conversation.appendText("Other Player: " + communication.data);
         }
+        else if (communication.type == Message.GUESS){
+            //todo: run code to provide a guess to the game manager
+        }
+        else if (communication.type == Message.AUTODISCOVER){
+            manager.openConnection(communication.data, 8888);
+            NetworkCommunication comm = new NetworkCommunication(Message.AUTODISCOVER, manager.getLocalIP());
+        }
 
         //todo: Finish the rest of the commands.
     }
@@ -165,6 +172,13 @@ public class Controller {
 	}
 	@FXML
 	void startNewGame(){
+        if (imageGrid.getChildren().size() > 0){
+            imageGrid.getChildren().remove(0, imageGrid.getChildren().size() - 1);
+        }
+        if (ipAddress.getText().length() < 0){
+            manager.reportError("You need to specify an IP to connect to!");
+            return;
+        }
 		setIPAddress();
 		cardSetChoice();
 		numCardChoice();

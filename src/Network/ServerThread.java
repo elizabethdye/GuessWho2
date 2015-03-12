@@ -43,6 +43,7 @@ public class ServerThread extends Thread{
                     if (manager == null) {
                         manager = NetworkManager.getInstance();
                     }
+                    System.out.println("Commuication: " + comm.toString());
                     manager.addComm(comm);
                 }
                 connection.close();
