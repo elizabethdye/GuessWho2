@@ -173,10 +173,11 @@ public class Controller {
 	@FXML
 	void startNewGame(){
         if (imageGrid.getChildren().size() > 0){
-            imageGrid.getChildren().remove(0, imageGrid.getChildren().size() - 1);
+            imageGrid.getChildren().remove(0, imageGrid.getChildren().size());
         }
-        if (ipAddress.getText().length() < 0){
+        if (ipAddress.getText().length() <= 0){
             manager.reportError("You need to specify an IP to connect to!");
+            System.out.println("You need to specify an IP to connect to!");
             return;
         }
 		setIPAddress();
@@ -265,12 +266,14 @@ public class Controller {
     private int findColumnSelected(Node node) {
     	return imageGrid.getColumnIndex(node);
     }
-    private void setUpGrid() {
+    @SuppressWarnings("static-access")
+	private void setUpGrid() {
     	Card tempCard;
     	BufferedImage bufImage;
     	Image image;
 		int width=(int) Math.sqrt(manager.numCards);
 		cardGrid=new Card[width][width];
+		
 		//imageGrid = new GridPane();
 		imageGrid.setGridLinesVisible(true);
 		for (int idx=0; idx<width; idx++) {
@@ -282,12 +285,12 @@ public class Controller {
 				ImageView imgView = new ImageView(image);
 				imgView.setFitWidth(imageGrid.getWidth() / width);
 				imgView.setFitHeight(imageGrid.getWidth() / width);
-				//imageGrid.setColumnIndex(imgView, idx);
-				//imageGrid.setRowIndex(imgView, idy);
-				//imageGrid.setRowSpan(imgView, 1);
-				//imageGrid.setColumnSpan(imgView, 1);
-				//imageGrid.addRow(idy, imgView);
+				imageGrid.setColumnIndex(imgView, idx);
+				imageGrid.setRowIndex(imgView, idy);
+				imageGrid.setRowSpan(imgView, 1);
+				imageGrid.setColumnSpan(imgView, 1);
 				imageGrid.addRow(idy, imgView);
+				//imageGrid.add(imgView, idy, idx);
 				//set the image to a row, column within the grid, so a specific grid spot
 				//I believe there is a method to set an image within a grid like setColumn, setRow
 			}
