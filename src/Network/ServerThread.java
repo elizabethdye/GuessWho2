@@ -33,11 +33,14 @@ public class ServerThread extends Thread{
                 String line = socketReader.readLine();
 
                 if (isStartCommand(line)) {
+                    StringBuilder sb = new StringBuilder();
                     line = socketReader.readLine();
+                    while(!isEndCommand(line)){
+                        sb.append(line + "\n");
+                        line = socketReader.readLine();
+                    }
 
-                    System.out.println(line);
-
-                    NetworkCommunication comm = getFromString(line);
+                    NetworkCommunication comm = getFromString(sb.toString());
                     System.out.println(comm.toString());
 
                     if (manager == null) {
@@ -78,7 +81,6 @@ public class ServerThread extends Thread{
     NetworkCommunication getFromString(String s){
 
         String[] lines = s.split("\\|"); // Can't use the final variable in ClientThread because it will evaluate '|' to and empty String
-        System.out.println("Line: " + s + ", First: " + lines[0] + ", Second: " + lines[1]);
         Message type = Message.fromString(lines[0]);
         String data = "";
         for (int i = 1; i < lines.length; ++i){

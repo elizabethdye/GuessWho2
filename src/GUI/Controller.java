@@ -121,7 +121,6 @@ public class Controller {
                         } catch (InterruptedException e) {
                             e.printStackTrace();
                         }
-
                     });
                 }
             }
@@ -139,8 +138,6 @@ public class Controller {
             manager.openConnection(communication.data, 8888);
             NetworkCommunication comm = new NetworkCommunication(Message.AUTODISCOVER, manager.getLocalIP());
         }
-
-        //todo: Finish the rest of the commands.
     }
     private boolean shouldPrint(NetworkCommunication comm){
         return comm.type == Message.TEXT || comm.type == Message.RESPONSE || comm.type == Message.QUESTION;
