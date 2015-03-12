@@ -49,6 +49,7 @@ public class ServerThread extends Thread{
                     System.out.println("Commuication: " + comm.toString());
                     manager.addComm(comm);
                 }
+
                 connection.close();
 
             } catch (IOException e) {

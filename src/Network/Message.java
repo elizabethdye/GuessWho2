@@ -2,7 +2,7 @@ package Network;
 
 
 public enum Message {
-    TEXT, GUESS, RESPONSE, QUESTION, AUTODISCOVER, ERROR, NONE;
+    TEXT, GUESS, RESPONSE, QUESTION, AUTODISCOVER, ERROR, NONE, CARD;
 
     public String toString() {
         switch (this){
@@ -16,6 +16,8 @@ public enum Message {
                 return "QUESTION";
             case AUTODISCOVER:
                 return "AUTODISCOVER";
+            case CARD:
+                return "CARD";
             default:
                 return "NONE";
         }
@@ -35,6 +37,9 @@ public enum Message {
         }
         else if (s.equals(AUTODISCOVER.toString())){
             return AUTODISCOVER;
+        }
+        else if (s.equals(CARD.toString())){
+            return CARD;
         }
         else {
             return NONE;
