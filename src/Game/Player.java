@@ -27,6 +27,9 @@ public class Player {
 	}
 	
 	private Card getRandomCard() {
-		return deck.getCard(rand.nextInt(deck.getSize()));
+		int index=rand.nextInt(deck.getSize());
+		System.out.println(deck.getCard(index));
+		System.out.println(deck.getCard(index).getName());
+		return deck.getCard(index);
 	}
 }

@@ -43,6 +43,9 @@ public class Game {//handles basic game rules
 			}
 		}
 	}
+	public Player getPlayer() {
+		return p1; //TODO fix this
+	}
 	void gameOver() {
 		gameOver=true;
 		//print game over

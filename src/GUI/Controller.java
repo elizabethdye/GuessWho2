@@ -58,7 +58,6 @@ public class Controller {
     private CardSet cardSet;
     private Deck deck;
 	private Card[][] cardGrid;
-	private Player player;
 	private final int ipNum=8888;
     public boolean gameStarted = false;
     
@@ -290,7 +289,7 @@ public class Controller {
 		imageGrid.add(imgView, x, y);
     }
     private void insertProfilePic() {
-    	BufferedImage playerImage = player.getCard().getImage();
+    	BufferedImage playerImage = game.getPlayer().getCard().getImage();//TODO fix for each gui
     	Image image = convertBufferedToImage(playerImage);
     	profile.setImage(image);
     }
