@@ -107,6 +107,7 @@ public class Controller {
         String ip = manager.getLocalIP();
         conversation.appendText("Your IP: " + manager.getLocalIP() + '\n');
         manager.setDisplay(conversation);
+        isQuestion.setVisible(false);
         addCardChoices();
         addNumCardChoices();
         Timer t = new Timer();
