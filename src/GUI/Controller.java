@@ -21,10 +21,8 @@ import java.util.TimerTask;
 public class Controller {
 	@FXML
 	TextField ipAddress;
-	
 	@FXML
 	ChoiceBox<String> card_Set;
-	
 	@FXML
 	ChoiceBox<String> num_Cards;
 	
@@ -58,7 +56,7 @@ public class Controller {
     private CardSet cardSet;
     private Deck deck;
 	private Card[][] cardGrid;
-	private final int ipNum=8888;
+	private final int port=8888;
     public boolean gameStarted = false;
     
 	NetworkManager manager = NetworkManager.getInstance();
@@ -184,7 +182,7 @@ public class Controller {
 		numCardChoice();
 		startGame();
 
-        manager.openConnection(ipAddress.getText(), ipNum);
+        manager.openConnection(ipAddress.getText(), port);
         gameStarted = true;
 	}
     @FXML
