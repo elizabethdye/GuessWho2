@@ -6,21 +6,12 @@ public class Game {//handles basic game rules
 
 	
 	public Game(Deck deck, int size) {	
-		p1=new Player(deck);
+		p1=new Player(deck); 
 		p2=new Player(deck);
 		p1Turn=true;
 		gameOver=false;
 	}
 	
-	public void turn() {
-		if (p1Turn) {
-			//TODO display yes or no p1 gui
-		}
-		else {
-			//TODO display yes or no p2 gui
-		}
-		changeTurn();
-	}
 	public void p1Guess(Card card) {
 		if (p1Turn) {
 			if (p2.isCorrectCard(card.getName())) {
@@ -32,6 +23,7 @@ public class Game {//handles basic game rules
 			}
 		}
 	}
+	
 	public void p2Guess(Card card) {
 		if (!p1Turn) {
 			if (p1.isCorrectCard(card.getName())) {
@@ -43,20 +35,33 @@ public class Game {//handles basic game rules
 			}
 		}
 	}
+	
 	public Player getPlayer() {
 		return p1; //TODO fix this
 	}
-	void gameOver() {
+	
+	public void penalize(Player p) {
+		p.setPenalized(true);
+	}
+	
+	public void removePenalty(Player p) {
+		p.setPenalized(false);
+	}
+	
+	public boolean isEditable() {
+		return !gameOver;
+	}
+	
+	public boolean p1Turn() {
+		return p1Turn;
+	}
+	
+	private void gameOver() {
 		gameOver=true;
 		//print game over
 		//TODO
 	}
-	void penalize(Player p) {
-		p.setPenalized(true);
-	}
-	void removePenalty(Player p) {
-		p.setPenalized(false);
-	}
+	
 	private void changeTurn() {
 		if (p1Turn) {
 			if (!p1.isPenalized()) {
@@ -70,11 +75,5 @@ public class Game {//handles basic game rules
 			}
 			removePenalty(p2);
 		}
-	}
-	public boolean isEditable() {
-		return !gameOver;
-	}
-	public boolean p1Turn() {
-		return p1Turn;
 	}
 }

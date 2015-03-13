@@ -10,6 +10,7 @@ import com.sun.javafx.sg.prism.NGNode;
 import javafx.scene.Node;
 
 
+@SuppressWarnings("restriction")
 public class Card extends Node {
 	private String name;
 	private BufferedImage image;
@@ -26,23 +27,19 @@ public class Card extends Node {
 	}
 	@Override
 	protected boolean impl_computeContains(double arg0, double arg1) {
-		// TODO Auto-generated method stub
 		return false;
 	}
 	@Override
 	public BaseBounds impl_computeGeomBounds(BaseBounds arg0, BaseTransform arg1) {
-		// TODO Auto-generated method stub
 		return null;
 	}
 	@Override
 	protected NGNode impl_createPeer() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 	@Override
 	public Object impl_processMXNode(MXNodeAlgorithm arg0,
 			MXNodeAlgorithmContext arg1) {
-		// TODO Auto-generated method stub
 		return null;
 	}
 }

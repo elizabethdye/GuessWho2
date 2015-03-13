@@ -26,18 +26,21 @@ public class CardSet {
 		Collections.shuffle(cards);
 	}
 	
-	private BufferedImage readImage(File file) throws IOException {
-		return ImageIO.read(file);
-	}
 	private void initiate() throws IOException {
 		File[] files=listFiles();
 		for (File file: files) {
 			addFile(file);
 		}
 	}
+	
+	private BufferedImage readImage(File file) throws IOException {
+		return ImageIO.read(file);
+	}
+	
 	private void addFile(File file) throws IOException {	
 		cards.add(new Card(file.getName(), readImage(file)));
 	}
+	
 	private File[] listFiles() {
 		return new File(picFolder+"/"+folderName).listFiles();
 	}
