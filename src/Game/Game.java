@@ -5,7 +5,7 @@ public class Game {//handles basic game rules
 	private boolean p1Turn, gameOver;
 
 	
-	public Game(Deck deck, int size) {	
+	public Game(Deck deck) {	
 		p1=new Player(deck); 
 		p2=new Player(deck);
 		p1Turn=true;
@@ -19,7 +19,7 @@ public class Game {//handles basic game rules
 			}
 			else {
 				penalize(p1);
-				p1Turn=false;
+				changeTurn();
 			}
 		}
 	}
@@ -31,13 +31,16 @@ public class Game {//handles basic game rules
 			}
 			else {
 				penalize(p2);
-				p1Turn=true;
+				changeTurn();
 			}
 		}
 	}
 	
-	public Player getPlayer() {
-		return p1; //TODO fix this
+	public Player getPlayer1() {
+		return p1;
+	}
+	public Player getPlayer2() {
+		return p2;
 	}
 	
 	public void penalize(Player p) {
@@ -58,22 +61,30 @@ public class Game {//handles basic game rules
 	
 	private void gameOver() {
 		gameOver=true;
-		//print game over
-		//TODO
 	}
 	
-	private void changeTurn() {
+	public void changeTurn() {
 		if (p1Turn) {
-			if (!p1.isPenalized()) {
-				p1Turn=false;
+			if (p2.isPenalized()) {
+				if (p1.isPenalized()) {
+					removePenalty(p1);
+					removePenalty(p2);
+					p1Turn=false;
+				}
+				else {removePenalty(p2);}
 			}
-			removePenalty(p1);
+			else {p1Turn=false;}
 		}
 		else {
-			if (!p2.isPenalized()) {
-				p1Turn=true;
+			if (p1.isPenalized()) {
+				if (p2.isPenalized()) {
+					removePenalty(p1);
+					removePenalty(p2);
+					p1Turn=true;
+				}
+				else {removePenalty(p1);}
 			}
-			removePenalty(p2);
+			else {p1Turn=true;}
 		}
 	}
 }

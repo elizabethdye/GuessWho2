@@ -19,7 +19,7 @@ public class Player {
 	boolean isCorrectCard(String card) {
 		return this.card.getName().equals(card);
 	}
-	boolean isPenalized() {
+	public boolean isPenalized() {
 		return penalized;
 	}
 	void setPenalized(boolean b) {

@@ -16,7 +16,7 @@ public class CardSet {
 	public CardSet(String setName) {
 		this.folderName=setName;
 		try {initiate();}
-		catch (IOException e) {e.printStackTrace();}
+		catch (IOException e) {e.printStackTrace();}//TODO
 	}
 	
 	public Card getCard(int index) {

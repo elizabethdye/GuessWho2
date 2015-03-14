@@ -4,7 +4,7 @@ public class Deck {
 	private Card[] cards;
 	private CardSet set;
 	
-	public Deck(int size, CardSet set) {
+	public Deck(CardSet set, int size) {
 		this.cards=new Card[size];
 		this.set=set;
 		setUpCards();
@@ -19,6 +19,7 @@ public class Deck {
 		set.randomize();
 		for (int i=0; i<cards.length; i++) {
 			cards[i]=set.getCard(i);
+			//TODO error handling for size>num cards in set
 		}
 	}
 }

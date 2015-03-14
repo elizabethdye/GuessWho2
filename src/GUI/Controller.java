@@ -70,8 +70,8 @@ public class Controller {
     
 	@FXML
 	void startNewGame(){
-		clearImageGrid();
 		if (checkIP()) {
+			clearImageGrid();
 			setIPAddress();
 			chooseCardSet();
 			chooseNumCards();
@@ -123,7 +123,7 @@ public class Controller {
     	if(game.p1Turn()) {
     		game.p1Guess(cardGrid[row][col]);
     	} else {
-    		game.p2Guess((Card)guessed);
+    		//game.p2Guess((Card)guessed);//TODO
     	}
     }
     
@@ -149,14 +149,14 @@ public class Controller {
     }
     
     private void startGame() {
-    	deck=new Deck(manager.numCards, cardSet);
-    	game=new Game(deck,manager.numCards);
+    	deck=new Deck(cardSet, manager.numCards);
+    	game=new Game(deck);
         setUpGrid();
         insertProfilePic();
     }
     
     private void insertProfilePic() {
-    	Card playerCard = game.getPlayer().getCard();//TODO fix for each gui
+    	Card playerCard = game.getPlayer1().getCard();//TODO fix for each gui
     	Image image = getImageFromCard(playerCard);
     	profile.setImage(image);
     }
