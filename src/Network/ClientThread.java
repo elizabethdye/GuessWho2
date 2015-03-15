@@ -44,12 +44,14 @@ public class ClientThread extends Thread {
 
             writer.close();
             sender.close();
-
             this.interrupt();
 
         } catch (IOException e) {
             if (!isAutoDiscover){
                 NetworkManager.getInstance().reportError(e.toString());
+            }
+            else {
+                this.interrupt();
             }
         } catch (InterruptedException e) {
             NetworkManager.getInstance().reportError(e.toString());

@@ -1,9 +1,12 @@
 package Network;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.scene.control.TextArea;
 
 import java.io.IOException;
 import java.net.Inet4Address;
+import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.concurrent.ArrayBlockingQueue;
@@ -20,7 +23,7 @@ public class NetworkManager {
 	public int numCards;
 	public String IPAddress;
 	private int port=8888;
-    private ArrayList<String> knownServers;
+    private ObservableList<String> knownServers;
 
     public static NetworkManager getInstance() {
         return ourInstance;
@@ -31,7 +34,7 @@ public class NetworkManager {
         errors = new ArrayBlockingQueue<NetworkCommunication>(100000);
         startServer();
         display = null;
-        knownServers = new ArrayList<>();
+        knownServers = FXCollections.observableArrayList();
     }
 
     public void setDisplay(TextArea text){
@@ -63,7 +66,7 @@ public class NetworkManager {
 
     public void sendAutoDiscover(String ip){
         ClientThread thread = new ClientThread(ip, port);
-        NetworkCommunication comm = new NetworkCommunication(Message.AUTODISCOVER, getLocalIP());
+        NetworkCommunication comm = new NetworkCommunication(Message.AUTODISCOVER, getLocalHostname());
         thread.addMessage(comm);
         thread.isAutoDiscover = true;
         thread.start();
@@ -107,6 +110,15 @@ public class NetworkManager {
         }
     }
 
+    public String getLocalHostname() {
+        try{
+            return InetAddress.getLocalHost().getHostName();
+        }
+        catch (UnknownHostException e){
+            return "Couldn't get Hostname";
+        }
+    }
+
     public void test(String IP) {
         System.out.println("Starting Server");
 
@@ -128,10 +140,15 @@ public class NetworkManager {
     }
 
     void addServer(String ip){
+        System.out.println("Added Server(1): " + ip);
         if (!knownServers.contains(ip)){
-            System.out.println("Added Server: " + ip);
+            System.out.println("Added Server(2): " + ip);
             knownServers.add(ip);
             sendAutoDiscover(ip);
         }
+    }
+
+    public ObservableList<String> getKnownServers(){
+        return knownServers;
     }
 }
