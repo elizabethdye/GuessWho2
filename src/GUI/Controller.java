@@ -15,6 +15,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 
 import java.awt.image.BufferedImage;
+import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -66,6 +67,7 @@ public class Controller {
         manager.setDisplay(conversation);
         Timer t = new Timer();
         t.schedule(makeTimerTask(), 1000, 800);
+        startAutoDiscover();
     }
     
 	@FXML
@@ -204,6 +206,13 @@ public class Controller {
         NetworkCommunication comm = new NetworkCommunication(Message.RESPONSE, message);
         manager.sendMessage(comm);
     }
+
+    @FXML
+    public void sendMessage(){
+        String text = inputText.getText();
+        NetworkCommunication comm = new NetworkCommunication(Message.TEXT, text);
+        manager.sendMessage(comm);
+    }
     
     private void presentData(){
         //called to display the most recently received event.
@@ -230,6 +239,13 @@ public class Controller {
                 }
             }
         };
+    }
+
+    public void startAutoDiscover(){
+        ArrayList<String> strings = manager.potentialNetworkPartners();
+        for (String ip : strings){
+            manager.sendAutoDiscover(ip);
+        }
     }
     
     private Node findNodeSelected() {

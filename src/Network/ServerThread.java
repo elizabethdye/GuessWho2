@@ -33,33 +33,46 @@ public class ServerThread extends Thread{
                 String line = socketReader.readLine();
 
                 if (isStartCommand(line)) {
-                    StringBuilder sb = new StringBuilder();
-                    line = socketReader.readLine();
-                    while(!isEndCommand(line)){
-                        sb.append(line + "\n");
-                        line = socketReader.readLine();
-                    }
+                    String message = readFromSocket(socketReader);
+                    NetworkCommunication comm = getFromString(message);
 
-                    NetworkCommunication comm = getFromString(sb.toString());
-                    System.out.println(comm.toString());
+                    checkManager();
 
-                    if (manager == null) {
-                        manager = NetworkManager.getInstance();
-                    }
-                    System.out.println("Commuication: " + comm.toString());
-                    manager.addComm(comm);
+                    handleComm(comm);
                 }
-
                 connection.close();
 
             } catch (IOException e) {
-                e.printStackTrace();
                 manager.reportError(e.toString());
             }
         }
     }
 
+    String readFromSocket(BufferedReader socketReader) throws IOException {
+        String line = socketReader.readLine();
+        StringBuilder sb = new StringBuilder();
+        while(!isEndCommand(line)){
+            sb.append(line + "\n");
+            line = socketReader.readLine();
+        }
 
+        return sb.toString();
+    }
+
+    void handleComm(NetworkCommunication comm){
+        if (comm.type == Message.AUTODISCOVER){
+            manager.addServer(comm.data);
+        }
+        else {
+            manager.addComm(comm);
+        }
+    }
+
+    void checkManager(){
+        if (manager == null) {
+            manager = NetworkManager.getInstance();
+        }
+    }
 
     void acceptConnection() throws IOException {
         if (connectionClosed()) {

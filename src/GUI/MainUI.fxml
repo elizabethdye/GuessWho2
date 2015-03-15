@@ -1,14 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import javafx.scene.image.*?>
-<?import javafx.scene.text.*?>
 <?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.Font?>
-
 <VBox alignment="TOP_CENTER" prefHeight="728.0" prefWidth="829.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="GUI.Controller">
    <children>
       <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
@@ -16,9 +12,9 @@
             <Label text="IP Address: " />
             <TextField fx:id="ipAddress" />
             <Label text="      Card Set: " />
-            <ChoiceBox fx:id="card_Set" prefWidth="150.0" />
+            <ChoiceBox fx:id="cardSetBox" prefWidth="150.0" />
             <Label text="       # of Cards:" />
-            <ChoiceBox fx:id="num_Cards" prefWidth="150.0" />
+            <ChoiceBox fx:id="numCardsBox" prefWidth="150.0" />
             <Button fx:id="startGame" mnemonicParsing="false" onAction="#startNewGame" text="Start Game" translateX="10.0" />
          </children>
       </HBox>

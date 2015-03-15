@@ -27,6 +27,7 @@ public class ClientThread extends Thread {
         try {
             sender = openConnection();
             writer = new BufferedWriter(new OutputStreamWriter(sender.getOutputStream()));
+            boolean autoDiscoverThread = false;
 
             if (sender != null){
                 NetworkCommunication comm = (NetworkCommunication)toSend.take();
@@ -36,10 +37,13 @@ public class ClientThread extends Thread {
                 writeToSocket(writer, ServerThread.START + "\n");
                 writeToSocket(writer, toSend + "\n");
                 writeToSocket(writer, ServerThread.END);
+                autoDiscoverThread = checkAuto(comm.type);
             }
 
             writer.close();
             sender.close();
+
+            this.interrupt();
 
         } catch (IOException e) {
             NetworkManager.getInstance().reportError(e.toString());
@@ -51,6 +55,15 @@ public class ClientThread extends Thread {
     public void writeHeader(BufferedWriter writer, String header) throws IOException {
         if (isValidHeader(header)){
             writer.write(header);
+        }
+    }
+
+    boolean checkAuto(Message ms){
+        if (ms == Message.AUTODISCOVER){
+            return true;
+        }
+        else {
+            return false;
         }
     }
 
