@@ -15,12 +15,14 @@ public class ClientThread extends Thread {
     public ArrayBlockingQueue toSend;
     boolean finished;
     public static final String seperator = "|";
+    public boolean isAutoDiscover;
 
     public ClientThread(String destinationIP, int port){
         this.destinationIP = destinationIP;
         this.port = port;
         this.toSend = new ArrayBlockingQueue<NetworkCommunication>(2, true);
         this.finished = false;
+        this.isAutoDiscover = false;
     }
 
     public void run(){
@@ -31,13 +33,13 @@ public class ClientThread extends Thread {
 
             if (sender != null){
                 NetworkCommunication comm = (NetworkCommunication)toSend.take();
+                this.isAutoDiscover = checkAuto(comm.type);
 
                 String toSend = comm.header + seperator + comm.data;
 
                 writeToSocket(writer, ServerThread.START + "\n");
                 writeToSocket(writer, toSend + "\n");
                 writeToSocket(writer, ServerThread.END);
-                autoDiscoverThread = checkAuto(comm.type);
             }
 
             writer.close();
@@ -46,7 +48,9 @@ public class ClientThread extends Thread {
             this.interrupt();
 
         } catch (IOException e) {
-            NetworkManager.getInstance().reportError(e.toString());
+            if (!isAutoDiscover){
+                NetworkManager.getInstance().reportError(e.toString());
+            }
         } catch (InterruptedException e) {
             NetworkManager.getInstance().reportError(e.toString());
         }

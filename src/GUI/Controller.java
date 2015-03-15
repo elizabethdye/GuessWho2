@@ -140,6 +140,9 @@ public class Controller {
             manager.openConnection(communication.data, 8888);
             NetworkCommunication comm = new NetworkCommunication(Message.AUTODISCOVER, manager.getLocalIP());
         }
+        else if (communication.type == Message.ERROR){
+            conversation.appendText("ERROR: " + communication.data);
+        }
     }
     
     private void changeDefaultSettings() {
@@ -233,7 +236,7 @@ public class Controller {
                             NetworkCommunication comm = manager.getLatest();
                             handleCommand(comm);
                         } catch (InterruptedException e) {
-                            e.printStackTrace();
+                            conversation.appendText("ERROR: " + e.toString());
                         }
                     });
                 }

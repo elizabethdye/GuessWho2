@@ -12,6 +12,7 @@ import java.util.concurrent.ArrayBlockingQueue;
 public class NetworkManager {
     private static NetworkManager ourInstance = new NetworkManager();
     ArrayBlockingQueue<NetworkCommunication> received;
+    ArrayBlockingQueue<NetworkCommunication> errors;
     Thread serverThread;
     ClientThread clientThread;
     TextArea display;
@@ -26,7 +27,8 @@ public class NetworkManager {
     }
 
     private NetworkManager() {
-        received = new ArrayBlockingQueue<NetworkCommunication>(2, true);
+        received = new ArrayBlockingQueue<NetworkCommunication>(100, true);
+        errors = new ArrayBlockingQueue<NetworkCommunication>(100000);
         startServer();
         display = null;
         knownServers = new ArrayList<>();
@@ -63,6 +65,7 @@ public class NetworkManager {
         ClientThread thread = new ClientThread(ip, port);
         NetworkCommunication comm = new NetworkCommunication(Message.AUTODISCOVER, getLocalIP());
         thread.addMessage(comm);
+        thread.isAutoDiscover = true;
         thread.start();
     }
 
@@ -117,7 +120,7 @@ public class NetworkManager {
 
     public void reportError(String message){
         NetworkCommunication comm = new NetworkCommunication(Message.ERROR, message);
-        this.addComm(comm);
+        received.add(comm);
     }
 
     public int numItems() {
