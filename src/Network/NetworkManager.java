@@ -141,6 +141,7 @@ public class NetworkManager {
 
     void addServer(String ip){
         System.out.println("Added Server(1): " + ip);
+        System.out.println("Recieved Autodiscover from " + ip + ".");
         if (!knownServers.contains(ip)){
             System.out.println("Added Server(2): " + ip);
             knownServers.add(ip);

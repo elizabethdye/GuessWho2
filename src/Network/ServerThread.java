@@ -60,6 +60,7 @@ public class ServerThread extends Thread{
     }
 
     void handleComm(NetworkCommunication comm){
+        System.out.println("Recieved Comm" + comm.toString());
         if (comm.type == Message.AUTODISCOVER){
             manager.addServer(comm.data);
         }
