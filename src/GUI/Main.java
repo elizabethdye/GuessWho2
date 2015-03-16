@@ -41,7 +41,7 @@ public class Main extends Application {
         }
     }
 
-    public void Log(String s){
+    public static void Log(String s){
         System.out.println(s);
     }
 }

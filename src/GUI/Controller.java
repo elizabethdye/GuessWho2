@@ -8,6 +8,7 @@ import javafx.application.Platform;
 import javafx.collections.ObservableList;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.fxml.FXML;
+import javafx.geometry.Point2D;
 import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
@@ -55,6 +56,7 @@ public class Controller {
     private CardSet cardSet;
     private Deck deck;
 	private Card[][] cardGrid;
+    private Point2D selected;
 	private final int port=8888;
     public boolean gameStarted = false;
 	private NetworkManager manager = NetworkManager.getInstance();
@@ -158,6 +160,7 @@ public class Controller {
     	game=new Game(deck);
         setUpGrid();
         insertProfilePic();
+
     }
     
     private void insertProfilePic() {
@@ -244,6 +247,7 @@ public class Controller {
         };
     }
 
+
     public void startAutoDiscover(){
         ArrayList<String> strings = manager.potentialNetworkPartners();
         for (String ip : strings){
@@ -276,9 +280,22 @@ public class Controller {
 		cardGrid[row][column]=tempCard;
 		Image image=getImageFromCard(tempCard);
 		ImageView imgView = new ImageView(image);
-		imgView.setFitWidth(imageGrid.getWidth() / width);
-		imgView.setFitHeight(imageGrid.getHeight() / width);
-		imageGrid.add(imgView, row, column);
+        double wide = imageGrid.getWidth() / width;
+        double height = imageGrid.getHeight() / width;
+        imgView.setFitHeight(height);
+        imgView.setFitWidth(wide);
+
+
+        final Button item = new Button();
+        item.setGraphic(imgView);
+        item.setMinSize(0, 0);
+        item.setMaxSize(wide, height);
+        item.setOnAction((e) -> {
+            Main.Log("I'm Here! the selected item was (row, column): " + row + ", " + column);
+            //todo: handle selection logic
+        });
+
+		imageGrid.add(item, row, column);
     }
     
     private Image getImageFromCard(Card card) {
