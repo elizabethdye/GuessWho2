@@ -1,5 +1,6 @@
 package Network;
 
+import GUI.Main;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.TextArea;
@@ -77,7 +78,8 @@ public class NetworkManager {
         String ip = getLocalIP();
         String ipStart = ip.substring(0, ip.lastIndexOf('.'));
         for(int i = 0; i < 255; ++i){
-            String next = ipStart + "." + i;
+            String lastOctet =  "." + i;
+            String next = ipStart + lastOctet;
             if (!next.equals(ip)){
                 neighbors.add(next);
             }
@@ -85,9 +87,11 @@ public class NetworkManager {
         return neighbors;
     }
 
-    public void endConnections() {
-        serverThread.interrupt();
-        clientThread.stopThread(); //custom clean stopper
+    public void stopServer() {
+        if (serverThread.isAlive()){
+            serverThread.interrupt();
+            Main.Log("Closing Server.  Is alive: " + serverThread.isAlive());
+        }
     }
 
     boolean channelSetup(){

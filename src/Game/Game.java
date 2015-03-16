@@ -1,46 +1,74 @@
 package Game;
 
+import Network.Message;
+import Network.NetworkCommunication;
+import Network.NetworkManager;
+
 public class Game {//handles basic game rules
-	private Player p1, p2;
+	private Player user, otherPlayer;
 	private boolean p1Turn, gameOver;
+    private NetworkManager manager = NetworkManager.getInstance();
+
+    public static final String GUESS_RIGHT = "CORRECT", GUESS_WRONG = "WRONG";
 
 	
 	public Game(Deck deck) {	
-		p1=new Player(deck); 
-		p2=new Player(deck);
+		user =new Player(deck);
+		otherPlayer =new Player(deck);
 		p1Turn=true;
 		gameOver=false;
 	}
 	
 	public void p1Guess(Card card) {
 		if (p1Turn) {
-			if (p2.isCorrectCard(card.getName())) {
+			if (otherPlayer.isCorrectCard(card.getName())) {
 				gameOver();	
 			}
 			else {
-				penalize(p1);
+				penalize(user);
 				changeTurn();
 			}
 		}
 	}
+
+    public void guess(String name){
+        if (p1Turn){
+            NetworkCommunication guess = new NetworkCommunication(Message.GUESS, name);
+            manager.sendMessage(guess);
+
+            changeTurn();
+        }
+    }
+
+    public void wrongGuess(){
+        penalize(user);
+    }
+
+    public boolean checkGuess(String name){
+        boolean isCorrect =  user.isCorrectCard(name);
+        if (!isCorrect){
+            penalize(otherPlayer);
+        }
+        return isCorrect;
+    }
 	
 	public void p2Guess(Card card) {
 		if (!p1Turn) {
-			if (p1.isCorrectCard(card.getName())) {
+			if (user.isCorrectCard(card.getName())) {
 				gameOver();	
 			}
 			else {
-				penalize(p2);
+				penalize(otherPlayer);
 				changeTurn();
 			}
 		}
 	}
 	
 	public Player getPlayer1() {
-		return p1;
+		return user;
 	}
 	public Player getPlayer2() {
-		return p2;
+		return otherPlayer;
 	}
 	
 	public void penalize(Player p) {
@@ -65,24 +93,24 @@ public class Game {//handles basic game rules
 	
 	public void changeTurn() {
 		if (p1Turn) {
-			if (p2.isPenalized()) {
-				if (p1.isPenalized()) {
-					removePenalty(p1);
-					removePenalty(p2);
+			if (otherPlayer.isPenalized()) {
+				if (user.isPenalized()) {
+					removePenalty(user);
+					removePenalty(otherPlayer);
 					p1Turn=false;
 				}
-				else {removePenalty(p2);}
+				else {removePenalty(otherPlayer);}
 			}
 			else {p1Turn=false;}
 		}
 		else {
-			if (p1.isPenalized()) {
-				if (p2.isPenalized()) {
-					removePenalty(p1);
-					removePenalty(p2);
+			if (user.isPenalized()) {
+				if (otherPlayer.isPenalized()) {
+					removePenalty(user);
+					removePenalty(otherPlayer);
 					p1Turn=true;
 				}
-				else {removePenalty(p1);}
+				else {removePenalty(user);}
 			}
 			else {p1Turn=true;}
 		}

@@ -130,13 +130,29 @@ public class Controller {
     		//game.p2Guess((Card)guessed);//TODO
     	}
     }
+
+    @FXML
+    void guessSelected(){ //Take a look at this one, let me know if I need to change it -- John
+        if (selected == null){
+            return;
+        }
+        String selectedName = getSelectedName();
+        NetworkCommunication guess = new NetworkCommunication(Message.GUESS, selectedName);
+        manager.sendMessage(guess);
+    }
+
+    String getSelectedName() {
+        int x = (int)selected.getX(), y = (int)selected.getY();
+        Card chosen = cardGrid[x][y];
+        return chosen.getName();
+    }
     
     public void handleCommand(NetworkCommunication communication) {
         if (shouldPrint(communication)) {
             conversation.appendText("Other Player: " + communication.data);
         }
         else if (communication.type == Message.GUESS){
-            //TODO: run code to provide a guess to the game manager
+            handleGuess(communication);
         }
         else if (communication.type == Message.AUTODISCOVER){
             manager.openConnection(communication.data, 8888);
@@ -145,6 +161,32 @@ public class Controller {
         else if (communication.type == Message.ERROR){
             conversation.appendText("ERROR: " + communication.data);
         }
+        else if (communication.type == Message.RESPONSE){
+            String response = communication.data.replace("\n", "");
+            if (response.equals(Game.GUESS_RIGHT)){
+                //todo: End the game with victory
+                conversation.appendText("VICTORY!\n");
+            }
+            else if (response.equals(Game.GUESS_WRONG)){
+                game.wrongGuess();
+                conversation.appendText("WRONG... How Could you?\n");
+            }
+            else {
+                manager.reportError("Couldn't interpret the response from server: " + communication.data);
+            }
+        }
+    }
+
+    void handleGuess(NetworkCommunication communication){
+        boolean isCorrect = game.checkGuess(communication.data);
+        NetworkCommunication comm;
+        if (isCorrect){
+            comm = new NetworkCommunication(Message.RESPONSE, Game.GUESS_RIGHT);
+        }
+        else {
+            comm = new NetworkCommunication(Message.RESPONSE, Game.GUESS_WRONG);
+        }
+        manager.sendMessage(comm);
     }
     
     private void changeDefaultSettings() {
@@ -217,6 +259,7 @@ public class Controller {
     public void sendMessage(){
         String text = inputText.getText();
         NetworkCommunication comm = new NetworkCommunication(Message.TEXT, text);
+        conversation.appendText("Me: " + inputText.getText() + "\n");
         manager.sendMessage(comm);
     }
     
@@ -285,17 +328,22 @@ public class Controller {
         imgView.setFitHeight(height);
         imgView.setFitWidth(wide);
 
-
         final Button item = new Button();
         item.setGraphic(imgView);
         item.setMinSize(0, 0);
         item.setMaxSize(wide, height);
         item.setOnAction((e) -> {
             Main.Log("I'm Here! the selected item was (row, column): " + row + ", " + column);
-            //todo: handle selection logic
+
+            setSelected(row, column);
+            //todo: Change the image color... slightly.
         });
 
 		imageGrid.add(item, row, column);
+    }
+
+    void setSelected(int x, int y){
+        selected = new Point2D(x, y);
     }
     
     private Image getImageFromCard(Card card) {
@@ -320,7 +368,7 @@ public class Controller {
     }
     
     private boolean shouldPrint(NetworkCommunication comm){
-        return comm.type == Message.TEXT || comm.type == Message.RESPONSE || comm.type == Message.QUESTION;
+        return comm.type == Message.TEXT || comm.type == Message.QUESTION;
     }
     
     private boolean isEditable() {

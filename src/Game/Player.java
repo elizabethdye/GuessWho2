@@ -1,4 +1,6 @@
 package Game;
+import GUI.Main;
+
 import java.util.Random;
 
 
@@ -17,7 +19,8 @@ public class Player {
 		return card;
 	}
 	boolean isCorrectCard(String card) {
-		return this.card.getName().equals(card);
+        Main.Log("Correct: " + this.card.getName() + "\nRecieved: " + card + "\nSentResponse: " + this.card.getName().equals(card));
+        return this.card.getName().equals(card.replace("\n", ""));
 	}
 	public boolean isPenalized() {
 		return penalized;

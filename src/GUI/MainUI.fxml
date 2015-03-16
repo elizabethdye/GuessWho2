@@ -81,7 +81,7 @@
                               <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                            </HBox.margin>
                         </Button>
-                        <Button fx:id="guess" alignment="CENTER" mnemonicParsing="false" text="Guess" textAlignment="CENTER">
+                        <Button fx:id="guess" alignment="CENTER" mnemonicParsing="false" onAction="#guessSelected" text="Guess" textAlignment="CENTER">
                            <HBox.margin>
                               <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                            </HBox.margin>
@@ -95,7 +95,7 @@
                   </HBox>
                </bottom>
                <top>
-                  <GridPane fx:id="imageGrid" maxHeight="550.0" maxWidth="417.0" prefHeight="550.0" prefWidth="417.0" BorderPane.alignment="CENTER">
+                  <GridPane fx:id="imageGrid" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="550.0" prefWidth="417.0" BorderPane.alignment="CENTER">
                     <columnConstraints>
                       <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                       <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
