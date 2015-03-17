@@ -144,10 +144,10 @@ public class GameTests {
 		assertFalse(game.isEditable());
 	}
 	private void isP1Turn() {
-		assertTrue(game.userPlayerTurn());
+		assertTrue(game.userTurn());
 	}
 	private void isP2Turn() {
-		assertFalse(game.userPlayerTurn());
+		assertFalse(game.userTurn());
 	}
 	private void checkP1Penalized() {
 		assertTrue(getP1().isPenalized());

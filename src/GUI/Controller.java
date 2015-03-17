@@ -80,7 +80,7 @@ public class Controller {
 			startGame();
 	        manager.openConnection(ipAddress.getText(), port);
 	        gameStarted = true;
-            if (game.userTurn){
+            if (game.userTurn()){
                 userTurn();
             }
             else {
@@ -101,17 +101,6 @@ public class Controller {
         NetworkCommunication comm = new NetworkCommunication(Message.TEXT, "No!");
         manager.sendMessage(comm);
         game.changeTurn();
-    }
-    
-    @FXML
-    public void favorite() {
-    	//TODO
-    	//Draw heart over selected node
-    	if (isEditable()) {
-    		Node selected = findNodeSelected();
-    		//int row = findRowSelected(selected);
-    		//int col = findColumnSelected(selected);
-    	}
     }
 
     @FXML
