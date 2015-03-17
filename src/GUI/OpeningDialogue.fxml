@@ -22,7 +22,7 @@
             <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
                <children>
                   <Label text="IP Address: " />
-                  <TextField fx:id="ipAddress" alignment="CENTER" onAction="#setIPAddress" />
+                  <TextField fx:id="ipAddress" alignment="CENTER" />
                </children>
             </HBox>
             <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">

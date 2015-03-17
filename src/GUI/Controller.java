@@ -17,19 +17,11 @@ import javafx.scene.layout.GridPane;
 
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
-import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
 
 public class Controller {
-	@FXML
-	TextField ipAddress;
-	@FXML
-	ChoiceBox<String> cardSetBox;
-	@FXML
-	ChoiceBox<String> numCardsBox;	
-	@FXML
-	Button startGame;
+	
     @FXML
     GridPane imageGrid;
     @FXML
@@ -49,6 +41,7 @@ public class Controller {
     @FXML
     Button no;
     
+    
     private Game game;
     private CardSet cardSet;
     private Deck deck;
@@ -67,149 +60,74 @@ public class Controller {
         Timer t = new Timer();
         t.schedule(makeTimerTask(), 1000, 800);
         startAutoDiscover();
-
+        startNewGame();
     }
-    
-	@FXML
+
 	void startNewGame(){
 		if (checkIP()) {
 			clearImageGrid();
-			setIPAddress();
-			chooseCardSet();
-			chooseNumCards();
+//			setIPAddress();
+//			chooseCardSet();
+//			chooseNumCards();
 			startGame();
-	        manager.openConnection(ipAddress.getText(), port);
+	        manager.openConnection(manager.IPAddress, port);
 	        gameStarted = true;
-            if (game.userTurn()){
-                userTurn();
-            }
-            else {
-                otherTurn();
-            }
 		}
 	}
 	
     @FXML
     private void yes() {
-    	NetworkCommunication comm = new NetworkCommunication(Message.TEXT, "Yes!");
-        manager.sendMessage(comm);
-        game.changeTurn();
+    	response("Yes!");
     }
     
     @FXML
     private void no() {
-        NetworkCommunication comm = new NetworkCommunication(Message.TEXT, "No!");
-        manager.sendMessage(comm);
-        game.changeTurn();
+    	response("No!");
     }
 
+    
     @FXML
-    void guessSelected(){ //Take a look at this one, let me know if I need to change it -- John
-        if (selected == null){
-            return;
-        }
-        String selectedName = getSelectedName();
-        NetworkCommunication guess = new NetworkCommunication(Message.GUESS, selectedName);
-        manager.sendMessage(guess);
-    }
-
-    private String getSelectedName() {
-        int x = (int)selected.getX(), y = (int)selected.getY();
-        Card chosen = cardGrid[x][y];
-        return chosen.getName();
+    private void guess() {//TODO this probably is not right
+        Node guessed = findNodeSelected();
+        int row = findRowSelected(guessed);
+    	int col = findColumnSelected(guessed);
+    	if(guessed.equals(null)) {
+    		return;
+    	}
+    	if(game.p1Turn()) {
+    		game.p1Guess(cardGrid[row][col]);
+    	} else {
+    		//game.p2Guess((Card)guessed);//TODO
+    	}
     }
     
     public void handleCommand(NetworkCommunication communication) {
-        if (communication.type == Message.TEXT) {
+        if (shouldPrint(communication)) {
             conversation.appendText("Other Player: " + communication.data);
         }
         else if (communication.type == Message.GUESS){
-            conversation.appendText("Other Player (Question): " + communication.data);
-        }
-        else if (communication.type == Message.GUESS){
-            handleGuess(communication);
+            //TODO: run code to provide a guess to the game manager
         }
         else if (communication.type == Message.AUTODISCOVER){
-        	handleAutoDiscover(communication);
+            manager.openConnection(communication.data, 8888);
+            NetworkCommunication comm = new NetworkCommunication(Message.AUTODISCOVER, manager.getLocalIP());
         }
         else if (communication.type == Message.ERROR){
             conversation.appendText("ERROR: " + communication.data);
         }
-        else if (communication.type == Message.RESPONSE){
-            String response = communication.data.replace("\n", "");
-            if (response.equals(Game.GUESS_RIGHT)){
-            	victory();
-            }
-            else if (response.equals(Game.GUESS_WRONG)){
-            	wrongGuess();
-            }
-            else {
-                manager.reportError("Couldn't interpret the response from server: " + communication.data);
-            }
-        }
-        else if (communication.type == Message.INITINFO){
-            String[] info = communication.data.split(":");
-            if (info[0].equals("TURN")){
-                setTurnFromString(info[1]);
-            }
-        }
-    }
-
-    void setTurnFromString(String s){
-        if (s.equals("true")){
-            game.userTurn = true;
-        }
-        else {
-            game.userTurn = false;
-        }
-    }
-
-    boolean decideTurn(){
-        Random rand = new Random();
-        return rand.nextInt() % 2 == 1;
-    }
-    private void wrongGuess() {
-        game.wrongGuess();
-        conversation.appendText("WRONG... How Could you?\n");
-    }
-    private void victory() {
-    	conversation.appendText("VICTORY!\n");
-    }
-    void handleGuess(NetworkCommunication communication){
-        boolean isCorrect = game.checkGuess(communication.data);
-        NetworkCommunication comm;
-        if (isCorrect){
-            comm = new NetworkCommunication(Message.RESPONSE, Game.GUESS_RIGHT);
-        }
-        else {
-            comm = new NetworkCommunication(Message.RESPONSE, Game.GUESS_WRONG);
-        }
-        manager.sendMessage(comm);
     }
     
     private void changeDefaultSettings() {
         inputText.setWrapText(true);
         conversation.setWrapText(true);
         isQuestion.setVisible(false);
-        setUpCardSet();
-        setUpNumCards();
+//        setUpCardSet();
+//        setUpNumCards();
     }
     
     private void startGame() {
-    	deck=new Deck(cardSet, manager.numCards);
+    	deck=new Deck(CardSets.valueOf(manager.cardSetName).toCardSet(), manager.numCards);
     	game=new Game(deck);
-        game.parent = this;
-        NetworkCommunication comm;
-        if (decideTurn()){
-            game.userTurn = true;
-            comm = new NetworkCommunication(Message.INITINFO, "TURN:true");
-        }
-        else {
-            game.userTurn = false;
-            comm = new NetworkCommunication(Message.INITINFO, "TURN:false");
-        }
-        manager.sendMessage(comm);
-
         setUpGrid();
         insertProfilePic();
 
@@ -222,7 +140,7 @@ public class Controller {
     }
     
 	private boolean checkIP() {
-        if (ipAddress.getText().length() <= 0){
+        if (manager.IPAddress.length() <= 0){
             manager.reportError("You need to specify an IP to connect to!");
             System.out.println("You need to specify an IP to connect to!");
             return false;
@@ -230,28 +148,18 @@ public class Controller {
         return true;
 	}
 	
-	private void setUpCardSet(){
-		cardSetBox.getItems().addAll("Emojis","Superheros");
-		cardSetBox.setValue("Emojis");
-	}
+//	private void setIPAddress(){
+//		manager.IPAddress = ipAddress.getText();
+//	}
 	
-	private void setUpNumCards(){
-		numCardsBox.getItems().addAll("9","16","25");
-		numCardsBox.setValue("16");
-	}
+//	private void chooseCardSet(){
+//		manager.cardSetName = getString(cardSetBox).toUpperCase();
+//		cardSet = CardSets.valueOf(manager.cardSetName).toCardSet();
+//	}
 	
-	private void setIPAddress(){
-		manager.IPAddress = ipAddress.getText();
-	}
-	
-	private void chooseCardSet(){
-		manager.cardSetName = getString(cardSetBox).toUpperCase();
-		cardSet = CardSets.valueOf(manager.cardSetName).toCardSet();
-	}
-	
-	private void chooseNumCards(){
-		manager.numCards = Integer.valueOf(getString(numCardsBox));
-	}
+//	private void chooseNumCards(){
+//		manager.numCards = Integer.valueOf(getString(numCardsBox));
+//	}
 	
 	private void clearImageGrid() {
 		 if (imageGrid.getChildren().size() > 0){
@@ -268,18 +176,17 @@ public class Controller {
     @FXML
     public void sendMessage(){
         String text = inputText.getText();
-        NetworkCommunication comm;
-        if (isQuestion.isSelected()){
-            comm = new NetworkCommunication(Message.QUESTION, text);
-            isQuestion.setSelected(false);
-            conversation.appendText("Me (Question): " + inputText.getText() + "\n");
-            game.changeTurn();
-        }
-        else {
-            conversation.appendText("Me: " + inputText.getText() + "\n");
-            comm = new NetworkCommunication(Message.TEXT, text);
-        }
+        NetworkCommunication comm = new NetworkCommunication(Message.TEXT, text);
         manager.sendMessage(comm);
+    }
+    
+    private void presentData(){
+        //called to display the most recently received event.
+        try {
+			NetworkCommunication data = manager.getLatest(); // I've modified this to take from the Network API -- John
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
  
     private TimerTask makeTimerTask() {
@@ -306,11 +213,6 @@ public class Controller {
         for (String ip : strings){
             manager.sendAutoDiscover(ip);
         }
-    }
-    
-    private void handleAutoDiscover(NetworkCommunication communication) {
-    	 manager.openConnection(communication.data, 8888);
-         NetworkCommunication comm = new NetworkCommunication(Message.AUTODISCOVER, manager.getLocalIP());
     }
     
     private Node findNodeSelected() {
@@ -343,27 +245,22 @@ public class Controller {
         imgView.setFitHeight(height);
         imgView.setFitWidth(wide);
 
+
         final Button item = new Button();
         item.setGraphic(imgView);
         item.setMinSize(0, 0);
         item.setMaxSize(wide, height);
         item.setOnAction((e) -> {
             Main.Log("I'm Here! the selected item was (row, column): " + row + ", " + column);
-
-            setSelected(row, column);
-            //todo: Change the image color... slightly.
+            //todo: handle selection logic
         });
 
 		imageGrid.add(item, row, column);
     }
-
-    void setSelected(int x, int y){
-        selected = new Point2D(x, y);
-    }
     
     private Image getImageFromCard(Card card) {
-        BufferedImage bufImage = card.getImage();
-        return convertBufferedToImage(bufImage);
+		BufferedImage bufImage=card.getImage();
+		return convertBufferedToImage(bufImage);
     }
     
     private Image convertBufferedToImage(BufferedImage image) {
@@ -383,22 +280,10 @@ public class Controller {
     }
     
     private boolean shouldPrint(NetworkCommunication comm){
-        return comm.type == Message.TEXT || comm.type == Message.QUESTION;
+        return comm.type == Message.TEXT || comm.type == Message.RESPONSE || comm.type == Message.QUESTION;
     }
     
     private boolean isEditable() {
     	return game.isEditable();
-    }
-
-    public void userTurn(){
-        isQuestion.setVisible(true);
-        yes.setVisible(false);
-        no.setVisible(false);
-    }
-
-    public void otherTurn(){
-        yes.setVisible(true);
-        no.setVisible(true);
-        isQuestion.setVisible(false);
     }
 }
