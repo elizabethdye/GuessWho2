@@ -79,7 +79,7 @@ public class Controller {
 			chooseNumCards();
 			startGame();
 	        manager.openConnection(ipAddress.getText(), port);
-	        gameStarted = true;
+	        gameStarted = true;  
             if (game.userTurn()){
                 userTurn();
             }
@@ -157,10 +157,10 @@ public class Controller {
 
     void setTurnFromString(String s){
         if (s.equals("true")){
-            game.userTurn = true;
+            game.setTurn(true);
         }
         else {
-            game.userTurn = false;
+            game.setTurn(false);
         }
     }
 

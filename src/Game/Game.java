@@ -14,7 +14,8 @@ public class Game {//handles basic game rules
     public static final String GUESS_RIGHT = "CORRECT", GUESS_WRONG = "WRONG";
 
 	
-	public Game(Deck deck) {	
+	public Game(Controller controller, Deck deck) {	
+		parent=controller;
 		userPlayer =new Player(deck);
 		otherPlayer =new Player(deck);
 		gameOver=false;
@@ -52,7 +53,7 @@ public class Game {//handles basic game rules
         }
         return isCorrect;
     }
-	
+    
 	public void otherPlayerGuess(Card card) {
 		if (!userTurn) {
 			if (userPlayer.isCorrectCard(card.getName())) {
@@ -65,10 +66,14 @@ public class Game {//handles basic game rules
 		}
 	}
 	
-	public Player getPlayer1() {
+	public void setTurn(boolean b) {
+		userTurn=b;
+	}
+	
+	public Player getUserPlayer() {
 		return userPlayer;
 	}
-	public Player getPlayer2() {
+	public Player getOtherPlayer() {
 		return otherPlayer;
 	}
 	
@@ -93,30 +98,22 @@ public class Game {//handles basic game rules
 	
 	public void changeTurn() {
 		if (userTurn) {
-			if (!userPlayer.isPenalized()) {
-				userTurn=false;
-			}
 			if (otherPlayer.isPenalized()) {
+				removePenalty(otherPlayer);
 				if (userPlayer.isPenalized()) {
-					removePenalty(userPlayer);
-					removePenalty(otherPlayer);
+					removePenalty(userPlayer);	
 					userTurn=false;
 				}
-				else {removePenalty(otherPlayer);}
 			}
 			else {userTurn=false;}
 		}
 		else {
-			if (!otherPlayer.isPenalized()) {
-				userTurn=true;
-			}
 			if (userPlayer.isPenalized()) {
+				removePenalty(userPlayer);
 				if (otherPlayer.isPenalized()) {
-					removePenalty(userPlayer);
 					removePenalty(otherPlayer);
 					userTurn=true;
 				}
-				else {removePenalty(userPlayer);}
 			}
 			else {userTurn=true;}
 		}
@@ -129,5 +126,49 @@ public class Game {//handles basic game rules
                 parent.otherTurn();
             }
         }
+	}
+	public void changeTurnForTesting() {
+		if (userTurn) {
+			if (otherPlayer.isPenalized()) {
+				removePenalty(otherPlayer);
+				if (userPlayer.isPenalized()) {
+					removePenalty(userPlayer);
+					userTurn=false;
+				}
+			}
+			else {userTurn=false;}  
+		}
+		else {
+			if (userPlayer.isPenalized()) {
+				removePenalty(userPlayer);
+				if (otherPlayer.isPenalized()) {
+					removePenalty(otherPlayer);
+					userTurn=true;  
+				}
+			}
+			else {userTurn=true;}
+		}
+	}
+	public void userPlayerGuessForTesting(Card card) {
+		if (userTurn) {
+			if (otherPlayer.isCorrectCard(card.getName())) {
+				gameOver();	
+			}
+			else {
+				penalize(userPlayer);
+				changeTurnForTesting();
+			}
+		}
+	}
+	public void otherPlayerGuessForTesting(Card card) {
+		if (!userTurn) {
+			if (userPlayer.isCorrectCard(card.getName())) {
+				gameOver();	
+			}
+			else {
+				penalize(otherPlayer);
+				changeTurnForTesting();
+			}
+		}
 	}
 }

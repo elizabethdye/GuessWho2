@@ -5,6 +5,7 @@ import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.Test;
 
+import GUI.Controller;
 import Game.Card;
 import Game.CardSet;
 import Game.CardSets;
@@ -23,7 +24,7 @@ public class GameTests {
 		size=16;
 		CardSet cardSet=CardSets.EMOJIS.toCardSet();
 		deck=new Deck(cardSet,size);
-		game=new Game(deck);
+		newGame();
 		CardSet wrongCardSet=CardSets.SUPERHEROES.toCardSet();
 		wrongCard=wrongCardSet.getCard(0);
 	}
@@ -113,22 +114,23 @@ public class GameTests {
 	}
 	
 	private void newGame() {
-		game=new Game(deck);
+		game=new Game(new Controller(),deck);
+		game.setTurn(true);
 	}
 	private void changeTurn() {
-		game.changeTurn();
+		game.changeTurnForTesting();
 	}
 	private void p1Guess(Card card) {
-		game.userPlayerGuess(card);
+		game.userPlayerGuessForTesting(card);
 	}
 	private void p2Guess(Card card) {
-		game.userPlayerGuess(card);
+		game.userPlayerGuessForTesting(card);
 	}
 	private Player getP1() {
-		return game.getPlayer1();
+		return game.getUserPlayer();
 	}
 	private Player getP2() {
-		return game.getPlayer2();
+		return game.getOtherPlayer();
 	}
 	private Card getP1Card() {
 		return getP1().getCard();
