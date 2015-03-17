@@ -121,10 +121,17 @@ public class GameTests {
 		game.changeTurnForTesting();
 	}
 	private void p1Guess(Card card) {
+<<<<<<< HEAD
 		game.userPlayerGuessForTesting(card);
 	}
 	private void p2Guess(Card card) {
 		game.userPlayerGuessForTesting(card);
+=======
+		game.p1Guess(card);
+	}
+	private void p2Guess(Card card) {
+		game.p2Guess(card);
+>>>>>>> SorryTemp
 	}
 	private Player getP1() {
 		return game.getUserPlayer();
@@ -146,10 +153,10 @@ public class GameTests {
 		assertFalse(game.isEditable());
 	}
 	private void isP1Turn() {
-		assertTrue(game.userTurn());
+		assertTrue(game.p1Turn());
 	}
 	private void isP2Turn() {
-		assertFalse(game.userTurn());
+		assertFalse(game.p1Turn());
 	}
 	private void checkP1Penalized() {
 		assertTrue(getP1().isPenalized());

@@ -1,37 +1,36 @@
 package Game;
 
-import GUI.Controller;
-import Network.Message;
-import Network.NetworkCommunication;
-import Network.NetworkManager;
-
 public class Game {//handles basic game rules
-	private Player userPlayer, otherPlayer;
-	private boolean userTurn, gameOver;
-    private NetworkManager manager = NetworkManager.getInstance();
-    public Controller parent;
-
-    public static final String GUESS_RIGHT = "CORRECT", GUESS_WRONG = "WRONG";
+	private Player p1, p2;
+	private boolean p1Turn, gameOver;
 
 	
+<<<<<<< HEAD
 	public Game(Controller controller, Deck deck) {	
 		parent=controller;
 		userPlayer =new Player(deck);
 		otherPlayer =new Player(deck);
+=======
+	public Game(Deck deck) {	
+		p1=new Player(deck); 
+		p2=new Player(deck);
+		p1Turn=true;
+>>>>>>> SorryTemp
 		gameOver=false;
 	}
 	
-	public void userPlayerGuess(Card card) {
-		if (userTurn) {
-			if (otherPlayer.isCorrectCard(card.getName())) {
+	public void p1Guess(Card card) {
+		if (p1Turn) {
+			if (p2.isCorrectCard(card.getName())) {
 				gameOver();	
 			}
 			else {
-				penalize(userPlayer);
+				penalize(p1);
 				changeTurn();
 			}
 		}
 	}
+<<<<<<< HEAD
 
     public void guess(String name){
         if (userTurn){
@@ -57,15 +56,22 @@ public class Game {//handles basic game rules
 	public void otherPlayerGuess(Card card) {
 		if (!userTurn) {
 			if (userPlayer.isCorrectCard(card.getName())) {
+=======
+	
+	public void p2Guess(Card card) {
+		if (!p1Turn) {
+			if (p1.isCorrectCard(card.getName())) {
+>>>>>>> SorryTemp
 				gameOver();	
 			}
 			else {
-				penalize(otherPlayer);
+				penalize(p2);
 				changeTurn();
 			}
 		}
 	}
 	
+<<<<<<< HEAD
 	public void setTurn(boolean b) {
 		userTurn=b;
 	}
@@ -75,6 +81,13 @@ public class Game {//handles basic game rules
 	}
 	public Player getOtherPlayer() {
 		return otherPlayer;
+=======
+	public Player getPlayer1() {
+		return p1;
+	}
+	public Player getPlayer2() {
+		return p2;
+>>>>>>> SorryTemp
 	}
 	
 	public void penalize(Player p) {
@@ -88,8 +101,9 @@ public class Game {//handles basic game rules
 	public boolean isEditable() {
 		return !gameOver;
 	}
-	public boolean userTurn() {
-		return userTurn;
+	
+	public boolean p1Turn() {
+		return p1Turn;
 	}
 	
 	private void gameOver() {
@@ -97,6 +111,7 @@ public class Game {//handles basic game rules
 	}
 	
 	public void changeTurn() {
+<<<<<<< HEAD
 		if (userTurn) {
 			if (otherPlayer.isPenalized()) {
 				removePenalty(otherPlayer);
@@ -104,28 +119,39 @@ public class Game {//handles basic game rules
 					removePenalty(userPlayer);	
 					userTurn=false;
 				}
+=======
+		if (p1Turn) {
+			if (p2.isPenalized()) {
+				if (p1.isPenalized()) {
+					removePenalty(p1);
+					removePenalty(p2);
+					p1Turn=false;
+				}
+				else {removePenalty(p2);}
+>>>>>>> SorryTemp
 			}
-			else {userTurn=false;}
+			else {p1Turn=false;}
 		}
 		else {
+<<<<<<< HEAD
 			if (userPlayer.isPenalized()) {
 				removePenalty(userPlayer);
 				if (otherPlayer.isPenalized()) {
 					removePenalty(otherPlayer);
 					userTurn=true;
 				}
+=======
+			if (p1.isPenalized()) {
+				if (p2.isPenalized()) {
+					removePenalty(p1);
+					removePenalty(p2);
+					p1Turn=true;
+				}
+				else {removePenalty(p1);}
+>>>>>>> SorryTemp
 			}
-			else {userTurn=true;}
+			else {p1Turn=true;}
 		}
-
-        if (parent != null){
-            if (userTurn) {
-                parent.userTurn();
-            }
-            else {
-                parent.otherTurn();
-            }
-        }
 	}
 	public void changeTurnForTesting() {
 		if (userTurn) {

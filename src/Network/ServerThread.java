@@ -52,7 +52,7 @@ public class ServerThread extends Thread{
         String line = socketReader.readLine();
         StringBuilder sb = new StringBuilder();
         while(!isEndCommand(line)){
-            sb.append(line);
+            sb.append(line + "\n");
             line = socketReader.readLine();
         }
 
