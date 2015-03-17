@@ -1,10 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.lang.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.text.*?>
 <?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.Font?>
+
 <VBox alignment="TOP_CENTER" prefHeight="728.0" prefWidth="829.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="GUI.Controller">
    <children>
       <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
@@ -79,17 +83,7 @@
                <bottom>
                   <HBox alignment="CENTER" prefHeight="32.0" prefWidth="417.0" BorderPane.alignment="CENTER">
                      <children>
-                        <Button fx:id="heart" mnemonicParsing="false" text="&lt;3">
-                           <HBox.margin>
-                              <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                           </HBox.margin>
-                        </Button>
                         <Button fx:id="guess" alignment="CENTER" mnemonicParsing="false" onAction="#guessSelected" text="Guess" textAlignment="CENTER">
-                           <HBox.margin>
-                              <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                           </HBox.margin>
-                        </Button>
-                        <Button fx:id="crossOut" mnemonicParsing="false" text="X">
                            <HBox.margin>
                               <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                            </HBox.margin>

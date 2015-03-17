@@ -32,10 +32,6 @@ public class Controller {
     @FXML
     GridPane imageGrid;
     @FXML
-    Button heart;
-    @FXML
-    Button crossOut;
-    @FXML
     Button guess;
     @FXML
     TextArea conversation;
