@@ -17,6 +17,7 @@ import javafx.scene.layout.GridPane;
 
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
+import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -174,6 +175,26 @@ public class Controller {
                 manager.reportError("Couldn't interpret the response from server: " + communication.data);
             }
         }
+        else if (communication.type == Message.INITINFO){
+            String[] info = communication.data.split(":");
+            if (info[0].equals("TURN")){
+                setTurnFromString(info[1]);
+            }
+        }
+    }
+
+    void setTurnFromString(String s){
+        if (s.equals("true")){
+            game.userTurn = true;
+        }
+        else {
+            game.userTurn = false;
+        }
+    }
+
+    boolean decideTurn(){
+        Random rand = new Random();
+        return rand.nextInt() % 2 == 1;
     }
 
     void handleGuess(NetworkCommunication communication){
@@ -200,6 +221,17 @@ public class Controller {
     	deck=new Deck(cardSet, manager.numCards);
     	game=new Game(deck);
         game.parent = this;
+        NetworkCommunication comm;
+        if (decideTurn()){
+            game.userTurn = true;
+            comm = new NetworkCommunication(Message.INITINFO, "TURN:true");
+        }
+        else {
+            game.userTurn = false;
+            comm = new NetworkCommunication(Message.INITINFO, "TURN:false");
+        }
+        manager.sendMessage(comm);
+
         setUpGrid();
         insertProfilePic();
 

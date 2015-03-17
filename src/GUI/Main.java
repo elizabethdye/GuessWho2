@@ -16,6 +16,8 @@ import java.net.URL;
 
 public class Main extends Application {
 
+    private static boolean isDebugging = true;
+
     @Override
     public void start(Stage primaryStage) throws Exception{
         setDockIcon();
@@ -47,7 +49,9 @@ public class Main extends Application {
     }
 
     public static void Log(String s){
-        System.out.println(s);
+        if(isDebugging) {
+            System.out.println(s);
+        }
     }
 
     public void setCloseConditions(Stage s){
