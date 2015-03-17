@@ -3,6 +3,8 @@ package Network;
 import junit.framework.TestCase;
 import org.junit.Test;
 
+import java.util.ArrayList;
+
 public class NetworkTests extends TestCase {
 
     NetworkManager manager = NetworkManager.getInstance();
@@ -20,6 +22,11 @@ public class NetworkTests extends TestCase {
 
     @Test
     public void testOpenConnection() throws Exception {
+        ArrayList<String> neighbors = manager.potentialNetworkPartners();
+        for (String ip : neighbors){
+            manager.openConnection(ip, 8888);
+            assertEquals(manager.IPAddress, ip);
+        }
     }
 
     @Test

@@ -32,10 +32,6 @@ public class Controller {
     @FXML
     GridPane imageGrid;
     @FXML
-    Button heart;
-    @FXML
-    Button crossOut;
-    @FXML
     Button guess;
     @FXML
     TextArea conversation;
@@ -70,6 +66,7 @@ public class Controller {
         Timer t = new Timer();
         t.schedule(makeTimerTask(), 1000, 800);
         startAutoDiscover();
+
     }
     
 	@FXML
@@ -82,17 +79,38 @@ public class Controller {
 			startGame();
 	        manager.openConnection(ipAddress.getText(), port);
 	        gameStarted = true;
+            if (game.userTurn){
+                userTurn();
+            }
+            else {
+                otherTurn();
+            }
 		}
 	}
 	
     @FXML
     private void yes() {
-    	response("Yes!");
+    	NetworkCommunication comm = new NetworkCommunication(Message.TEXT, "Yes!");
+        manager.sendMessage(comm);
+        game.changeTurn();
     }
     
     @FXML
     private void no() {
-    	response("No!");
+        NetworkCommunication comm = new NetworkCommunication(Message.TEXT, "No!");
+        manager.sendMessage(comm);
+        game.changeTurn();
+    }
+    
+    @FXML
+    public void favorite() {
+    	//TODO
+    	//Draw heart over selected node
+    	if (isEditable()) {
+    		Node selected = findNodeSelected();
+    		//int row = findRowSelected(selected);
+    		//int col = findColumnSelected(selected);
+    	}
     }
 
     @FXML
@@ -112,8 +130,11 @@ public class Controller {
     }
     
     public void handleCommand(NetworkCommunication communication) {
-        if (shouldPrint(communication)) {
+        if (communication.type == Message.TEXT) {
             conversation.appendText("Other Player: " + communication.data);
+        }
+        else if (communication.type == Message.GUESS){
+            conversation.appendText("Other Player (Question): " + communication.data);
         }
         else if (communication.type == Message.GUESS){
             handleGuess(communication);
@@ -167,6 +188,7 @@ public class Controller {
     private void startGame() {
     	deck=new Deck(cardSet, manager.numCards);
     	game=new Game(deck);
+        game.parent = this;
         setUpGrid();
         insertProfilePic();
 
@@ -225,18 +247,18 @@ public class Controller {
     @FXML
     public void sendMessage(){
         String text = inputText.getText();
-        NetworkCommunication comm = new NetworkCommunication(Message.TEXT, text);
-        conversation.appendText("Me: " + inputText.getText() + "\n");
-        manager.sendMessage(comm);
-    }
-    
-    private void presentData(){
-        //called to display the most recently received event.
-        try {
-			NetworkCommunication data = manager.getLatest(); // I've modified this to take from the Network API -- John
-        } catch (InterruptedException e) {
-            e.printStackTrace();
+        NetworkCommunication comm;
+        if (isQuestion.isSelected()){
+            comm = new NetworkCommunication(Message.QUESTION, text);
+            isQuestion.setSelected(false);
+            conversation.appendText("Me (Question): " + inputText.getText() + "\n");
+            game.changeTurn();
         }
+        else {
+            conversation.appendText("Me: " + inputText.getText() + "\n");
+            comm = new NetworkCommunication(Message.TEXT, text);
+        }
+        manager.sendMessage(comm);
     }
  
     private TimerTask makeTimerTask() {
@@ -319,8 +341,8 @@ public class Controller {
     }
     
     private Image getImageFromCard(Card card) {
-		BufferedImage bufImage=card.getImage();
-		return convertBufferedToImage(bufImage);
+        BufferedImage bufImage = card.getImage();
+        return convertBufferedToImage(bufImage);
     }
     
     private Image convertBufferedToImage(BufferedImage image) {
@@ -345,5 +367,17 @@ public class Controller {
     
     private boolean isEditable() {
     	return game.isEditable();
+    }
+
+    public void userTurn(){
+        isQuestion.setVisible(true);
+        yes.setVisible(false);
+        no.setVisible(false);
+    }
+
+    public void otherTurn(){
+        yes.setVisible(true);
+        no.setVisible(true);
+        isQuestion.setVisible(false);
     }
 }
