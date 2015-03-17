@@ -94,42 +94,6 @@ public class Controller {
     private void no() {
     	response("No!");
     }
-    
-    @FXML
-    public void favorite() {
-    	//TODO
-    	//Draw heart over selected node
-    	if (isEditable()) {
-    		Node selected = findNodeSelected();
-    		//int row = findRowSelected(selected);
-    		//int col = findColumnSelected(selected);
-    	}
-    }
-    
-    @FXML
-    public void crossOut() {
-    	//TODO Draw "X" over selected node
-    	if (isEditable()) {
-    		Node selected = findNodeSelected();
-    		//int row = findRowSelected(selected);
-    		//int col = findColumnSelected(selected);
-    	}
-    }
-    
-    @FXML
-    private void guess() {//TODO this probably is not right
-        Node guessed = findNodeSelected();
-        int row = findRowSelected(guessed);
-    	int col = findColumnSelected(guessed);
-    	if(guessed.equals(null)) {
-    		return;
-    	}
-    	if(game.p1Turn()) {
-    		game.p1Guess(cardGrid[row][col]);
-    	} else {
-    		//game.p2Guess((Card)guessed);//TODO
-    	}
-    }
 
     @FXML
     void guessSelected(){ //Take a look at this one, let me know if I need to change it -- John
@@ -141,7 +105,7 @@ public class Controller {
         manager.sendMessage(guess);
     }
 
-    String getSelectedName() {
+    private String getSelectedName() {
         int x = (int)selected.getX(), y = (int)selected.getY();
         Card chosen = cardGrid[x][y];
         return chosen.getName();
@@ -155,8 +119,7 @@ public class Controller {
             handleGuess(communication);
         }
         else if (communication.type == Message.AUTODISCOVER){
-            manager.openConnection(communication.data, 8888);
-            NetworkCommunication comm = new NetworkCommunication(Message.AUTODISCOVER, manager.getLocalIP());
+        	handleAutoDiscover(communication);
         }
         else if (communication.type == Message.ERROR){
             conversation.appendText("ERROR: " + communication.data);
@@ -164,19 +127,23 @@ public class Controller {
         else if (communication.type == Message.RESPONSE){
             String response = communication.data.replace("\n", "");
             if (response.equals(Game.GUESS_RIGHT)){
-                //todo: End the game with victory
-                conversation.appendText("VICTORY!\n");
+            	victory();
             }
             else if (response.equals(Game.GUESS_WRONG)){
-                game.wrongGuess();
-                conversation.appendText("WRONG... How Could you?\n");
+            	wrongGuess();
             }
             else {
                 manager.reportError("Couldn't interpret the response from server: " + communication.data);
             }
         }
     }
-
+    private void wrongGuess() {
+        game.wrongGuess();
+        conversation.appendText("WRONG... How Could you?\n");
+    }
+    private void victory() {
+    	conversation.appendText("VICTORY!\n");
+    }
     void handleGuess(NetworkCommunication communication){
         boolean isCorrect = game.checkGuess(communication.data);
         NetworkCommunication comm;
@@ -296,6 +263,11 @@ public class Controller {
         for (String ip : strings){
             manager.sendAutoDiscover(ip);
         }
+    }
+    
+    private void handleAutoDiscover(NetworkCommunication communication) {
+    	 manager.openConnection(communication.data, 8888);
+         NetworkCommunication comm = new NetworkCommunication(Message.AUTODISCOVER, manager.getLocalIP());
     }
     
     private Node findNodeSelected() {

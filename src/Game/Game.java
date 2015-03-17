@@ -5,34 +5,34 @@ import Network.NetworkCommunication;
 import Network.NetworkManager;
 
 public class Game {//handles basic game rules
-	private Player user, otherPlayer;
-	private boolean p1Turn, gameOver;
+	private Player userPlayer, otherPlayer;
+	private boolean userPlayerTurn, gameOver;
     private NetworkManager manager = NetworkManager.getInstance();
 
     public static final String GUESS_RIGHT = "CORRECT", GUESS_WRONG = "WRONG";
 
 	
 	public Game(Deck deck) {	
-		user =new Player(deck);
+		userPlayer =new Player(deck);
 		otherPlayer =new Player(deck);
-		p1Turn=true;
+		userPlayerTurn=true;
 		gameOver=false;
 	}
 	
-	public void p1Guess(Card card) {
-		if (p1Turn) {
+	public void userPlayerGuess(Card card) {
+		if (userPlayerTurn) {
 			if (otherPlayer.isCorrectCard(card.getName())) {
 				gameOver();	
 			}
 			else {
-				penalize(user);
+				penalize(userPlayer);
 				changeTurn();
 			}
 		}
 	}
 
     public void guess(String name){
-        if (p1Turn){
+        if (userPlayerTurn){
             NetworkCommunication guess = new NetworkCommunication(Message.GUESS, name);
             manager.sendMessage(guess);
 
@@ -41,20 +41,20 @@ public class Game {//handles basic game rules
     }
 
     public void wrongGuess(){
-        penalize(user);
+        penalize(userPlayer);
     }
 
     public boolean checkGuess(String name){
-        boolean isCorrect =  user.isCorrectCard(name);
+        boolean isCorrect =  userPlayer.isCorrectCard(name);
         if (!isCorrect){
             penalize(otherPlayer);
         }
         return isCorrect;
     }
 	
-	public void p2Guess(Card card) {
-		if (!p1Turn) {
-			if (user.isCorrectCard(card.getName())) {
+	public void otherPlayerGuess(Card card) {
+		if (!userPlayerTurn) {
+			if (userPlayer.isCorrectCard(card.getName())) {
 				gameOver();	
 			}
 			else {
@@ -65,7 +65,7 @@ public class Game {//handles basic game rules
 	}
 	
 	public Player getPlayer1() {
-		return user;
+		return userPlayer;
 	}
 	public Player getPlayer2() {
 		return otherPlayer;
@@ -83,8 +83,8 @@ public class Game {//handles basic game rules
 		return !gameOver;
 	}
 	
-	public boolean p1Turn() {
-		return p1Turn;
+	public boolean userPlayerTurn() {
+		return userPlayerTurn;
 	}
 	
 	private void gameOver() {
@@ -92,27 +92,27 @@ public class Game {//handles basic game rules
 	}
 	
 	public void changeTurn() {
-		if (p1Turn) {
+		if (userPlayerTurn) {
 			if (otherPlayer.isPenalized()) {
-				if (user.isPenalized()) {
-					removePenalty(user);
+				if (userPlayer.isPenalized()) {
+					removePenalty(userPlayer);
 					removePenalty(otherPlayer);
-					p1Turn=false;
+					userPlayerTurn=false;
 				}
 				else {removePenalty(otherPlayer);}
 			}
-			else {p1Turn=false;}
+			else {userPlayerTurn=false;}
 		}
 		else {
-			if (user.isPenalized()) {
+			if (userPlayer.isPenalized()) {
 				if (otherPlayer.isPenalized()) {
-					removePenalty(user);
+					removePenalty(userPlayer);
 					removePenalty(otherPlayer);
-					p1Turn=true;
+					userPlayerTurn=true;
 				}
-				else {removePenalty(user);}
+				else {removePenalty(userPlayer);}
 			}
-			else {p1Turn=true;}
+			else {userPlayerTurn=true;}
 		}
 	}
 }
