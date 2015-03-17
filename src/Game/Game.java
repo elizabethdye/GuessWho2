@@ -1,13 +1,15 @@
 package Game;
 
+import GUI.Controller;
 import Network.Message;
 import Network.NetworkCommunication;
 import Network.NetworkManager;
 
 public class Game {//handles basic game rules
 	private Player user, otherPlayer;
-	private boolean p1Turn, gameOver;
+	public boolean userTurn, gameOver;
     private NetworkManager manager = NetworkManager.getInstance();
+    public Controller parent;
 
     public static final String GUESS_RIGHT = "CORRECT", GUESS_WRONG = "WRONG";
 
@@ -15,12 +17,12 @@ public class Game {//handles basic game rules
 	public Game(Deck deck) {	
 		user =new Player(deck);
 		otherPlayer =new Player(deck);
-		p1Turn=true;
+		userTurn =false;
 		gameOver=false;
 	}
 	
 	public void p1Guess(Card card) {
-		if (p1Turn) {
+		if (userTurn) {
 			if (otherPlayer.isCorrectCard(card.getName())) {
 				gameOver();	
 			}
@@ -32,7 +34,7 @@ public class Game {//handles basic game rules
 	}
 
     public void guess(String name){
-        if (p1Turn){
+        if (userTurn){
             NetworkCommunication guess = new NetworkCommunication(Message.GUESS, name);
             manager.sendMessage(guess);
 
@@ -53,7 +55,7 @@ public class Game {//handles basic game rules
     }
 	
 	public void p2Guess(Card card) {
-		if (!p1Turn) {
+		if (!userTurn) {
 			if (user.isCorrectCard(card.getName())) {
 				gameOver();	
 			}
@@ -84,7 +86,7 @@ public class Game {//handles basic game rules
 	}
 	
 	public boolean p1Turn() {
-		return p1Turn;
+		return userTurn;
 	}
 	
 	private void gameOver() {
@@ -92,27 +94,38 @@ public class Game {//handles basic game rules
 	}
 	
 	public void changeTurn() {
-		if (p1Turn) {
+		if (userTurn) {
 			if (otherPlayer.isPenalized()) {
 				if (user.isPenalized()) {
 					removePenalty(user);
 					removePenalty(otherPlayer);
-					p1Turn=false;
+					userTurn =false;
 				}
 				else {removePenalty(otherPlayer);}
 			}
-			else {p1Turn=false;}
+			else {
+                userTurn =false;}
 		}
 		else {
 			if (user.isPenalized()) {
 				if (otherPlayer.isPenalized()) {
 					removePenalty(user);
 					removePenalty(otherPlayer);
-					p1Turn=true;
+					userTurn =true;
 				}
 				else {removePenalty(user);}
 			}
-			else {p1Turn=true;}
+			else {
+                userTurn =true;}
 		}
+
+        if (parent != null){
+            if (userTurn) {
+                parent.userTurn();
+            }
+            else {
+                parent.otherTurn();
+            }
+        }
 	}
 }
